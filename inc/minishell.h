@@ -14,9 +14,10 @@ char	*eval_var(char *str, char **envp);
 
 /* debug funciton */
 void	print_line(t_list* l);
+void	print_jobs(t_list* l);
 /* ----------------- */
 
 t_list	*parse_line(char *str, char **envp);
-
+t_list	*make_jobs(t_list *l);
 
 #endif

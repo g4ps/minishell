@@ -19,9 +19,14 @@ int main(int argc, char **argv, char **envp)
 {
 	char	*s;
 	t_list	*l;
+	t_list	*j;
 
-	s = ft_strdup("echo something  '||| HH |||' \"my name is : $USER\"   'Something'  $USER");
+	s = ft_strdup("echo something ; tar xvf fuck ; something else");
 	l = parse_line(s, envp);
+	printf("All line:\n");
 	print_line(l);
+	printf("------\n");
+	j = make_jobs(l);
+	print_jobs(j);
 	return 0;
 }
