@@ -17,8 +17,10 @@ void	print_vec(char **vec)
 int main(int argc, char **argv, char **envp)
 {
 	char *ls = get_path(argv[1], envp);
-	printf("%s\n", ls);
+	if (ls)
+		printf("%s\n", ls);
+	else
+		printf("couldn't find the program\n");
 	free(ls);
-	sleep(100);
 	return 0;
 }

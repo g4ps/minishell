@@ -4,7 +4,12 @@
 
 void	free_vec(char **vec)
 {
+	char **s;
 	char **n;
+
+	if (vec == NULL)
+		return ;
+	s = vec;
 	while (*vec)
 	{
 		n = vec + 1;
@@ -12,6 +17,7 @@ void	free_vec(char **vec)
 		vec = n;
 	}
 	free(*vec);
+	free(s);
 }
 
 char*	get_var(char *var_name, char **envp)
@@ -31,12 +37,13 @@ char*	get_var(char *var_name, char **envp)
 char**	parse_path(char *str)
 {
 	char **ret;
+	char **t;
 
 	while (*str != '=' && *str != '\0')
 		str++;
 	str++;
 	ret = ft_split(str, ':');
-	return ret;
+	return (ret);
 }
 
 int	find_in_dir(char *dir, char *file)
@@ -49,9 +56,11 @@ int	find_in_dir(char *dir, char *file)
 	while ((cont = readdir(d)) != NULL)
 	{
 		if (ft_strncmp(file, cont->d_name, 100) == 0)
+		{
+			closedir(d);
 			return 1;
+		}
 	}
-	free(cont);
 	closedir(d);
 	return 0;
 }
@@ -85,7 +94,7 @@ char	*get_path(char *str, char **envp)
 	if ((path = get_var("PATH", envp)) == NULL)
 		return NULL;
 	dirs = parse_path(path);
-	free_vec(dirs);
 	ret = get_fn(dirs, str);
+	free_vec(dirs);
 	return ret;
 }

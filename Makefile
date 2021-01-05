@@ -9,11 +9,13 @@ CFLAGS = -g -Iinc -Llibft -lft -Ilibft
 
 all: libft a.out
 
-libft:
+libft: libft/libft.a
+
+libft/libft.a:
 	make -C libft bonus
 
 a.out : $(OBJS) main.c
-	cc $(CFLAGS) $^ -o $@
+	cc $^ $(CFLAGS)  -o $@
 
 echo:
 	echo $(OBJS)
