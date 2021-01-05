@@ -4,11 +4,16 @@
 #include <stdio.h>
 #include "libft.h"
 
+typedef	struct	s_inp
+{
+	char	*token;
+	int	is_quoted;
+}		t_inp;
 
 char	*get_var(char *var_name, char **envp);
 char	**parse_path(char *str);
 char	*get_path(char *str, char **envp);
-char	*get_arg(char **str, char **envp);
+t_inp	*get_arg(char **str, char **envp);
 char	*eval(char *str, char **envp);
 char	*eval_var(char *str, char **envp);
 

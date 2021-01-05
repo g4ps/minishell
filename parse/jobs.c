@@ -9,7 +9,7 @@ void	print_line(t_list *l)
 	i = 1;
 	while (l)
 	{
-		printf("%d: %s\n", i, l->content);
+		printf("%d: %s\n", i, ((t_inp*)l->content)->token);
 		i++;
 		l = l->next;
 	}
@@ -20,7 +20,7 @@ void	print_jobs(t_list *l)
 	while (l)
 	{
 		print_line(l->content);
-	printf("\n");
+		printf("\n");
 		l = l->next;
 	}
 }
@@ -30,7 +30,7 @@ void	print_jobs(t_list *l)
 t_list*	parse_line(char *str, char **envp)
 {
 	t_list	*ret;
-	char	*s;
+	t_inp	*s;
 
 	ret = NULL;
 	while ((s = get_arg(&str, envp)) != NULL)

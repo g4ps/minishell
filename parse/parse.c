@@ -15,13 +15,13 @@ static int	dss(char *str1, char *str2)
 }
 
 int	is_sh_symb(char *str)
-{
+{	
+	if (dss(str, ">>"))
+		return (2);
 	if (dss(str, ";") || dss(str, "\'") || dss(str, "\"")
 			|| dss(str, "<") || dss(str, ">") ||
 			dss(str, "|"))
 		return (1);
-	else if (dss(str, ">>"))
-		return (2);
 	return (0);
 }
 
@@ -67,27 +67,36 @@ char	*eval(char *str, char **envp)
 	return ret;
 }
 
-char	*get_quote(char **str)
+t_inp	*eval_token(t_inp* tok, char **envp)
+{
+	if (!tok->is_quoted)
+		tok->token = eval(tok->token, envp);
+	return tok;
+}
+
+t_inp	*get_quote(char **str)
 {
 	char	*s;
-	char	*ret;
+	t_inp	*ret;
 
 	(*str)++;
 	s = *str;
+	ret = ft_calloc(sizeof(t_inp), 1);
+	ret->is_quoted = 1;
 	while (**str != '\'' && **str != '\0')
 	{
 		(*str)++;
 	}
-	ret = ft_calloc(sizeof(char), *str - s + 1);
-	ft_strlcpy(ret, s, *str - s + 1);
+	ret->token = ft_calloc(sizeof(char), *str - s + 1);
+	ft_strlcpy(ret->token, s, *str - s + 1);
 	(*str)++;
 	return (ret);
 }
 
-char	*get_dquote(char **str)
+t_inp	*get_dquote(char **str)
 {
 	char	*s;
-	char	*ret;
+	t_inp	*ret;
 	
 	(*str)++;
 	s = *str;
@@ -95,17 +104,19 @@ char	*get_dquote(char **str)
 	{
 		(*str)++;
 	}
-	ret = ft_calloc(sizeof(char), *str - s + 1);
-	ft_strlcpy(ret, s, *str - s + 1);
+	ret = ft_calloc(sizeof(t_inp), 1);
+	ret->is_quoted = 1;
+	ret->token = ft_calloc(sizeof(char), *str - s + 1);
+	ft_strlcpy(ret->token, s, *str - s + 1);
 	(*str)++;
 	return (ret);
 }
 
-char	*get_normal(char **str)
+t_inp	*get_normal(char **str)
 {
 	char	*s;
-	char	*ret;
 	int	n;
+	t_inp	*ret;
 
 	s = *str;
 	if ((n = is_sh_symb(*str)))
@@ -115,14 +126,14 @@ char	*get_normal(char **str)
 		while (!ft_isspace(**str) && **str != '\0' && !is_sh_symb(*str))
 			(*str)++;
 	}
-	ret = ft_calloc(sizeof(char), *str - s + 1);
-	ft_strlcpy(ret, s, *str - s + 1);
+	ret = ft_calloc(sizeof(t_inp), 1);
+	ret->token = ft_calloc(sizeof(char), *str - s + 1);
+	ft_strlcpy(ret->token, s, *str - s + 1);
 	return (ret);
 }
 
-char	*get_arg(char **str, char **envp)
+t_inp	*get_arg(char **str, char **envp)
 {
-	char	*ret;
 	char	*s;
 
 	while (ft_isspace(**str))
@@ -132,8 +143,8 @@ char	*get_arg(char **str, char **envp)
 	if (**str == '\'')
 		return (get_quote(str));
 	else if (**str == '\"')
-		return (eval(get_dquote(str), envp));
+		return (eval_token(get_dquote(str), envp));
 	else if (**str == '\0')
 		return NULL;
-	return (eval(get_normal(str), envp));
+	return (eval_token(get_normal(str), envp));
 }
