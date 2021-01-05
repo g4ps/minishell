@@ -96,6 +96,8 @@ char	*get_path(char *str, t_list *envp)
 	char	**dirs;
 	char	*ret;
 
+	if (ft_strchr(str, '/') != NULL)
+		return (str);
 	if ((path = get_var("PATH", envp)) == NULL)
 		return NULL;
 	dirs = parse_path(path);

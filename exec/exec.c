@@ -6,18 +6,25 @@ int	get_in_fd(t_list *job)
 {
 	int	ret;
 	t_inp	*t;
+	t_list	*prev;
 	char	*f;
 
+	prev = NULL;
 	while (job)
 	{
-		f = job->content;
+		t = job->content;
+		f = ((t_inp*)job->content)->token;
 		if (ft_strcmp(f, "<") == 0 && !t->is_quoted)
 		{
 			job = job->next;
+			if (prev && job)
+				prev->next = job->next;
+			f = ((t_inp*)job->content)->token;
 			if (job == NULL)
 				return (-2);
-			return (open(job->content, O_RDONLY));
+			return (open(f, O_RDONLY));
 		}
+		prev = job;
 		job = job->next;
 	}
 	return 0;
@@ -29,20 +36,28 @@ int	get_out_fd(t_list *job)
 	int	ret;
 	t_inp	*t;
 	char	*f;
+	char	*name;
+	t_list	*prev;
 
+	prev = NULL;
 	while (job)
 	{
-		f = job->content;
+		t = job->content;
+		f = ((t_inp*)job->content)->token;
 		if ((ft_strcmp(f, ">") == 0 || ft_strcmp(f, ">>") == 0) && !t->is_quoted)
 		{
 			job = job->next;
+			if (prev && job)
+				prev->next = job->next;
 			if (job == NULL)
 				return (-2);
+			name = ((t_inp*)job->content)->token;
 			if (ft_strcmp(f, ">") == 0)
-				return (open(job->content, O_WRONLY | O_CREAT | O_TRUNC, 0644));
+				return (open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644));
 			else
-				return (open(job->content, O_WRONLY | O_CREAT | O_APPEND, 0644));
+				return (open(name, O_WRONLY | O_CREAT | O_APPEND, 0644));
 		}
+		prev = job;
 		job = job->next;
 	}
 	return 1;
@@ -92,6 +107,31 @@ int	run_builtin(t_fds fd, t_list *job, t_list *envp)
 	return 0;
 }
 
+int	run_exec(t_fds fd, t_list *job, t_list *env)
+{
+	pid_t	pid;
+	int	status;
+	char	*name;
+
+	pid = fork();
+	if (pid < 0)
+		return -3;
+	else if (pid != 0)
+	{
+		wait(&status);
+		return (WEXITSTATUS(status));
+	}
+	else
+	{
+		fd.in_fd = dup2(fd.in_fd, 0);
+		fd.out_fd = dup2(fd.out_fd, 1);
+		name = get_prog_name(job);
+		execve(get_path(name, env),
+				mvfl_t(job),
+				mvfl(env));
+	}
+}
+
 int	exec_job(t_list *job, t_list *envp)
 {
 	t_fds	fd;
@@ -99,5 +139,25 @@ int	exec_job(t_list *job, t_list *envp)
 	fd = parse_for_fds(job);
 	if (is_builtin(((t_inp*)job->content)->token))
 		return (run_builtin(fd, job, envp));
-	return 0;
+	return (run_exec(fd, job, envp));
+}
+
+int	exec_line(t_list *jobs, t_list *env, char *sh)
+{
+	int	ret;
+	char	*err;
+
+	while (jobs)
+	{
+		ret = exec_job(jobs->content, env);
+		if (ret < 0)
+		{
+			err = ft_strjoin(sh, ":");
+			err = ft_strjoin(err, ((t_inp*)((t_list*)((t_list*)jobs->content)->content))->token);
+			err = ft_strjoin(err, ":");
+			perror(err);
+		}
+		jobs = jobs->next;
+	}
+	return (ret);
 }

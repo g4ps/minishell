@@ -34,6 +34,9 @@ t_list	*parse_line(char *str, t_list *envp);
 t_list	*make_jobs(t_list *l);
 t_list	*make_list_from_vector(char **vec);
 
+char	*get_prog_name(t_list *job);
+char	**mvfl(t_list *l);
+char	**mvfl_t(t_list *l);
 
 int	run_cd(t_fds fd, t_list *job, t_list *env);
 int	run_echo(t_fds fd, t_list *job, t_list *env);
@@ -43,5 +46,6 @@ int	run_unset(t_fds fd, t_list *job, t_list *env);
 int	run_env(t_fds fd, t_list *job, t_list *env);
 int	run_exit(t_fds fd, t_list *job, t_list *env);
 int	exec_job(t_list *job, t_list *env);
+int	exec_line(t_list *jobs, t_list *env, char *sh);
 
 #endif

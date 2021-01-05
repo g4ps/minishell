@@ -41,8 +41,8 @@ int main(int argc, char **argv, char **envp)
 		s[i] = '\0';
 		l = parse_line(s, env);
 		j = make_jobs(l);
-		if (l)
-			exec_job(l, env);
+		if (l && j)
+			exec_line(j, env, argv[0]);
 		free(s);
 	}
 }
