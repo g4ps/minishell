@@ -17,10 +17,11 @@ void	print_vec(char **vec)
 
 int main(int argc, char **argv, char **envp)
 {
-	char	*s = ft_strdup("my name is : $USER |");
-	free(s);
-	s = ft_strdup("$USER");
-	s = eval(s, envp);
-	printf("%s\n", s);
+	char	*s;
+	t_list	*l;
+
+	s = ft_strdup("echo something  '||| HH |||' \"my name is : $USER\"   'Something'  $USER");
+	l = parse_line(s, envp);
+	print_line(l);
 	return 0;
 }

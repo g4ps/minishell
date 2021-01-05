@@ -28,7 +28,7 @@ char	*eval(char *str, char **envp)
 	while (*str != '$' && *str != '\0')
 		str++;
 	if (*str == '\0')
-		return str;
+		return s;
 	prec = ft_calloc(sizeof(char), str - s + 2);
 	ft_strlcpy(prec, s, str - s + 1);
 	s = str;
@@ -86,7 +86,7 @@ char	*get_normal(char **str)
 	char	*ret;
 
 	s = *str;
-	while (!ft_isspace(**str))
+	while (!ft_isspace(**str) && **str != '\0')
 		(*str)++;
 	ret = ft_calloc(sizeof(char), *str - s + 1);
 	ft_strlcpy(ret, s, *str - s + 1);
@@ -111,4 +111,3 @@ char	*get_arg(char **str, char **envp)
 		return NULL;
 	return (eval(get_normal(str), envp));
 }
-

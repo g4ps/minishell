@@ -5,7 +5,7 @@ EXEC_OBJS = $(EXEC_SRCS:.c=.o)
 
 OBJS += $(EXEC_OBJS)
 
-PARSE_SRCS = parse.c
+PARSE_SRCS = parse.c jobs.c
 PARSE_DIR = parse/
 PARSE_SRCS := $(PARSE_SRCS:%=$(PARSE_DIR)%)
 PARSE_OBJS = $(PARSE_SRCS:.c=.o)
@@ -31,7 +31,7 @@ clean:
 	-rm $(OBJS)
 
 fclean: clean
-	-rm a.out
+	-rm -rf a.out*
 	-make -C libft fclean
 
 dump:
