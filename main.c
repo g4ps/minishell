@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include "minishell.h"
+#include "libft.h"
 #include <unistd.h>
 
 void	print_vec(char **vec)
@@ -16,11 +17,10 @@ void	print_vec(char **vec)
 
 int main(int argc, char **argv, char **envp)
 {
-	char *ls = get_path(argv[1], envp);
-	if (ls)
-		printf("%s\n", ls);
-	else
-		printf("couldn't find the program\n");
-	free(ls);
+	char	*s = ft_strdup("my name is : $USER |");
+	free(s);
+	s = ft_strdup("$USER");
+	s = eval(s, envp);
+	printf("%s\n", s);
 	return 0;
 }

@@ -23,12 +23,20 @@ void	free_vec(char **vec)
 char*	get_var(char *var_name, char **envp)
 {
 	int	len;
+	char	*s;
 
 	len = ft_strlen(var_name);
 	while (*envp)
 	{
 		if (ft_strncmp(var_name, *envp, len) == 0)
-			return *envp;
+		{
+			s = *envp;
+			while (*s != '=' && *s != '\0')
+				s++;
+			if (*s == '=')
+				s++;
+			return s;
+		}
 		envp++;
 	}
 	return NULL;
@@ -39,9 +47,6 @@ char**	parse_path(char *str)
 	char **ret;
 	char **t;
 
-	while (*str != '=' && *str != '\0')
-		str++;
-	str++;
 	ret = ft_split(str, ':');
 	return (ret);
 }

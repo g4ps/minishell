@@ -2,4 +2,5 @@
 *~
 .*.swp
 *.a
-a.out
+a.out*
+*.tar 
