@@ -14,4 +14,6 @@ void	print_err(int err, char *sh, char *p)
 		ft_putstr_fd("command not found\n", 2);
 	else if (err == -3)
 		ft_putstr_fd("can\'t fork:(\n", 2);
+	else if (err == -4)
+		perror("p");
 }

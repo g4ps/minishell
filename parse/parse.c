@@ -101,7 +101,10 @@ t_inp	*get_dquote(char **str)
 	s = *str;
 	while (**str != '\"' && **str != '\0')
 	{
-		(*str)++;
+		if (**str == '\\' && *(*str + 1) == '\"')
+		       (*str) += 2;
+		else	
+			(*str)++;
 	}
 	ret = ft_calloc(sizeof(t_inp), 1);
 	ret->is_quoted = 1;

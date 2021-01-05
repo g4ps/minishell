@@ -45,8 +45,10 @@ int	run_export(t_fds fd, t_list *job, t_list *env);
 int	run_unset(t_fds fd, t_list *job, t_list *env);
 int	run_env(t_fds fd, t_list *job, t_list *env);
 int	run_exit(t_fds fd, t_list *job, t_list *env);
-int	exec_job(t_list *job, t_list *env);
+int	exec_job(t_list *job, t_list *env, char *sh);
 int	exec_line(t_list *jobs, t_list *env, char *sh);
 void	print_err(int err, char *sh, char *p);
+void	f(int);
+void	f1(int);
 
 #endif
