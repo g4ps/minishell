@@ -7,6 +7,11 @@ OBJS += $(EXEC_OBJS)
 
 CFLAGS = -g -Iinc -Llibft -lft -Ilibft
 
+all: libft a.out
+
+libft:
+	make -C libft bonus
+
 a.out : $(OBJS) main.c
 	cc $(CFLAGS) $^ -o $@
 

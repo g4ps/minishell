@@ -32,7 +32,7 @@ char**	parse_path(char *str)
 {
 	char **ret;
 
-	while (*str != '=' && str != '\0')
+	while (*str != '=' && *str != '\0')
 		str++;
 	str++;
 	ret = ft_split(str, ':');
