@@ -4,6 +4,27 @@
 /* puropse of those function is to parse an input line into the set of */
 /* evaluated strings (justlike in bash */
 
+static int	dss(char *str1, char *str2)
+{
+	int	len;
+
+	len = ft_strlen(str2);
+	if (ft_strncmp(str1, str2, len) == 0)
+		return 1;
+	return 0;
+}
+
+int	is_sh_symb(char *str)
+{
+	if (dss(str, ";") || dss(str, "\'") || dss(str, "\"")
+			|| dss(str, "<") || dss(str, ">") ||
+			dss(str, "|"))
+		return (1);
+	else if (dss(str, ">>"))
+		return (2);
+	return (0);
+}
+
 char	*eval_var(char *str, char **envp)
 {
 	char	*ret;
@@ -84,13 +105,18 @@ char	*get_normal(char **str)
 {
 	char	*s;
 	char	*ret;
+	int	n;
 
 	s = *str;
-	while (!ft_isspace(**str) && **str != '\0')
-		(*str)++;
+	if ((n = is_sh_symb(*str)))
+		(*str) += n;
+	else
+	{
+		while (!ft_isspace(**str) && **str != '\0' && !is_sh_symb(*str))
+			(*str)++;
+	}
 	ret = ft_calloc(sizeof(char), *str - s + 1);
 	ft_strlcpy(ret, s, *str - s + 1);
-	(*str)++;
 	return (ret);
 }
 

@@ -83,5 +83,6 @@ char				*ft_ltoa(long x);
 char				*ft_ltoa_x(unsigned long arg, int cas);
 float				ft_atof(char *buf);
 void				*ft_lstindex(t_list *l, int i);
+int				ft_strcmp(char *str1, char *str2);
 
 #endif

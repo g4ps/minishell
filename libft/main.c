@@ -6,9 +6,7 @@
 int
 main(int argc, char **argv)
 {
-  if (argc != 2)
-    return 1;
-  float b = ft_atof(argv[1]);
-  printf("%g\n", b);
-  return 0;
+	char*	str1 = "Hello";
+	char*	str2 = "Hello";
+	printf("%d->%d\n", strcmp(str1, str2), ft_strcmp(str1, str2));
 }
