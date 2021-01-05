@@ -5,11 +5,17 @@
 void	print_line(t_list *l)
 {
 	int	i;
+	t_inp	*t;
 
 	i = 1;
 	while (l)
 	{
-		printf("%d: %s\n", i, ((t_inp*)l->content)->token);
+		t = l->content;
+		printf("%d: %-30s", i, t->token);
+		if (t->is_quoted)
+			printf("quoted\n");
+		else
+			printf("not quoted\n");
 		i++;
 		l = l->next;
 	}
@@ -51,7 +57,7 @@ t_list*	make_jobs(t_list *line)
 	s = line;
 	while (line)
 	{
-		if (ft_strncmp(line->content, ";", 3) == 0)
+		if (ft_strcmp(((t_inp*)line->content)->token, ";") == 0)
 		{
 			prev->next = NULL;
 			ft_lstadd_back(&ret, ft_lstnew(s));

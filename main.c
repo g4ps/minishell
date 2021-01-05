@@ -21,7 +21,7 @@ int main(int argc, char **argv, char **envp)
 	t_list	*l;
 	t_list	*j;
 
-	s = ft_strdup("echo something>><>;><     \'    $HOME    \'   \"my name is $USER\"");
+	s = ft_strdup("echo something>><  \">\"  <>;>  \'    $HOME    \'   \"my name is $USER\"");
 	l = parse_line(s, envp);
 	printf("All line:\n");
 	print_line(l);

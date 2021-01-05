@@ -69,8 +69,7 @@ char	*eval(char *str, char **envp)
 
 t_inp	*eval_token(t_inp* tok, char **envp)
 {
-	if (!tok->is_quoted)
-		tok->token = eval(tok->token, envp);
+	tok->token = eval(tok->token, envp);
 	return tok;
 }
 
