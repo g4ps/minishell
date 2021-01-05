@@ -113,6 +113,12 @@ int	run_exec(t_fds fd, t_list *job, t_list *env)
 	int	status;
 	char	*name;
 
+	name = get_prog_name(job);
+	name = get_path(name, env);
+	if (fd.in_fd < 0 || fd.out_fd < 0)
+		exit(1);
+	if (name == NULL)
+		return (-1);
 	pid = fork();
 	if (pid < 0)
 		return -3;
@@ -125,21 +131,21 @@ int	run_exec(t_fds fd, t_list *job, t_list *env)
 	{
 		fd.in_fd = dup2(fd.in_fd, 0);
 		fd.out_fd = dup2(fd.out_fd, 1);
-		name = get_prog_name(job);
-		execve(get_path(name, env),
-				mvfl_t(job),
-				mvfl(env));
+		execve(name, mvfl_t(job), mvfl(env));
+		exit(1);
 	}
 }
 
 int	exec_job(t_list *job, t_list *envp)
 {
+	int	ret;
 	t_fds	fd;
 
 	fd = parse_for_fds(job);
 	if (is_builtin(((t_inp*)job->content)->token))
 		return (run_builtin(fd, job, envp));
-	return (run_exec(fd, job, envp));
+	ret = run_exec(fd, job, envp);
+	return (ret);
 }
 
 int	exec_line(t_list *jobs, t_list *env, char *sh)
@@ -152,9 +158,8 @@ int	exec_line(t_list *jobs, t_list *env, char *sh)
 		ret = exec_job(jobs->content, env);
 		if (ret < 0)
 		{
-			err = ft_strjoin(sh, ":");
+			err = ft_strjoin(sh, ": ");
 			err = ft_strjoin(err, ((t_inp*)((t_list*)((t_list*)jobs->content)->content))->token);
-			err = ft_strjoin(err, ":");
 			perror(err);
 		}
 		jobs = jobs->next;
