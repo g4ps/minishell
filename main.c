@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -20,6 +21,28 @@ void	print_vec(char **vec)
 	}
 }
 
+void	f1(int k)
+{
+	ft_putstr_fd("\n", 1);
+	run_prompt();
+}
+
+void	f(int k)
+{
+}
+
+void	my_exit(int i)
+{
+	ft_putstr_fd(" exit\n", 1);
+	exit(0);
+}
+
+void	signal_setup()
+{
+	signal(SIGQUIT, f);
+	signal(SIGINT, f1);
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	char	*s;
@@ -31,11 +54,13 @@ int main(int argc, char **argv, char **envp)
 
 	t = 8096;
 	env = make_list_from_vector(envp);
+	signal_setup();
 	while (1)
 	{
 		s = NULL;
 		run_prompt();
-		getline(&s, &t, stdin);
+		if (getline(&s, &t, stdin) == EOF)
+			my_exit(0);
 		while (s[i] != '\n' && s[i] != '\0')
 			i++;
 		s[i] = '\0';

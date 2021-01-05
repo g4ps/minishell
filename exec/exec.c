@@ -20,7 +20,7 @@ int	get_in_fd(t_list *job)
 			if (prev && job)
 				prev->next = job->next;
 			f = ((t_inp*)job->content)->token;
-			if (job == NULL)
+			if (job == NULL || !prev || !job)
 				return (-2);
 			return (open(f, O_RDONLY));
 		}
@@ -49,8 +49,8 @@ int	get_out_fd(t_list *job)
 			job = job->next;
 			if (prev && job)
 				prev->next = job->next;
-			if (job == NULL)
-				return (-2);
+			if (job == NULL || !prev || !job)
+				return (-1);
 			name = ((t_inp*)job->content)->token;
 			if (ft_strcmp(f, ">") == 0)
 				return (open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644));
@@ -116,12 +116,12 @@ int	run_exec(t_fds fd, t_list *job, t_list *env)
 	name = get_prog_name(job);
 	name = get_path(name, env);
 	if (fd.in_fd < 0 || fd.out_fd < 0)
-		exit(1);
-	if (name == NULL)
 		return (-1);
+	if (name == NULL)
+		return (-2);
 	pid = fork();
 	if (pid < 0)
-		return -3;
+		return (-3);
 	else if (pid != 0)
 	{
 		wait(&status);
@@ -152,15 +152,15 @@ int	exec_line(t_list *jobs, t_list *env, char *sh)
 {
 	int	ret;
 	char	*err;
+	char	*p_name;
 
 	while (jobs)
 	{
+		p_name = ((t_inp*)((t_list*)jobs->content)->content)->token;
 		ret = exec_job(jobs->content, env);
 		if (ret < 0)
 		{
-			err = ft_strjoin(sh, ": ");
-			err = ft_strjoin(err, ((t_inp*)((t_list*)((t_list*)jobs->content)->content))->token);
-			perror(err);
+			print_err(ret, sh, p_name);
 		}
 		jobs = jobs->next;
 	}

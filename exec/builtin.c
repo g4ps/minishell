@@ -57,9 +57,11 @@ int	run_exit(t_fds fd, t_list *job, t_list *envp)
 	int	k;
 	char	*s;
 
-	s = ((t_inp*)job->content)->token;
-	if (!job)
+	if (job)
+	{
+		s = ((t_inp*)job->content)->token;
 		k = ft_atoi(s);
+	}
 	else
 		k = 0;
 	exit(k);
