@@ -20,24 +20,24 @@ void	free_vec(char **vec)
 	free(s);
 }
 
-char*	get_var(char *var_name, char **envp)
+char*	get_var(char *var_name, t_list *envp)
 {
 	int	len;
 	char	*s;
 
 	len = ft_strlen(var_name);
-	while (*envp)
+	while (envp)
 	{
-		if (ft_strncmp(var_name, *envp, len) == 0)
+		if (ft_strncmp(var_name, envp->content, len) == 0)
 		{
-			s = *envp;
+			s = envp->content;
 			while (*s != '=' && *s != '\0')
 				s++;
 			if (*s == '=')
 				s++;
 			return s;
 		}
-		envp++;
+		envp = envp->next;
 	}
 	return NULL;
 }
@@ -90,7 +90,7 @@ char *get_fn(char **dirs, char *str)
 }
 
 
-char	*get_path(char *str, char **envp)
+char	*get_path(char *str, t_list *envp)
 {
 	char	*path;
 	char	**dirs;

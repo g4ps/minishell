@@ -33,7 +33,7 @@ void	print_jobs(t_list *l)
 
 /* ---------------- */
 
-t_list*	parse_line(char *str, char **envp)
+t_list*	parse_line(char *str, t_list *envp)
 {
 	t_list	*ret;
 	t_inp	*s;
@@ -69,3 +69,4 @@ t_list*	make_jobs(t_list *line)
 	ft_lstadd_back(&ret, ft_lstnew(s));
 	return ret;
 }
+

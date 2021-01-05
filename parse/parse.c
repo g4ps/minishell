@@ -25,7 +25,7 @@ int	is_sh_symb(char *str)
 	return (0);
 }
 
-char	*eval_var(char *str, char **envp)
+char	*eval_var(char *str, t_list *envp)
 {
 	char	*ret;
 
@@ -36,7 +36,7 @@ char	*eval_var(char *str, char **envp)
 }
 
 
-char	*eval(char *str, char **envp)
+char	*eval(char *str, t_list *envp)
 {
 	char	*s;
 	char	*prec;
@@ -67,7 +67,7 @@ char	*eval(char *str, char **envp)
 	return ret;
 }
 
-t_inp	*eval_token(t_inp* tok, char **envp)
+t_inp	*eval_token(t_inp* tok, t_list *envp)
 {
 	tok->token = eval(tok->token, envp);
 	return tok;
@@ -131,7 +131,7 @@ t_inp	*get_normal(char **str)
 	return (ret);
 }
 
-t_inp	*get_arg(char **str, char **envp)
+t_inp	*get_arg(char **str, t_list *envp)
 {
 	char	*s;
 

@@ -6,6 +6,11 @@
 #include "libft.h"
 #include <unistd.h>
 
+void	run_prompt()
+{
+	ft_putstr_fd("> ", 1);
+}
+
 void	print_vec(char **vec)
 {
 	while (*vec)
@@ -18,15 +23,26 @@ void	print_vec(char **vec)
 int main(int argc, char **argv, char **envp)
 {
 	char	*s;
+	t_list	*env;
 	t_list	*l;
 	t_list	*j;
+	size_t	t;
+	int	i = 0;
 
-	s = ft_strdup("echo something>><  \">\"  <>;>  \'    $HOME    \'   \"my name is $USER\"");
-	l = parse_line(s, envp);
-	printf("All line:\n");
-	print_line(l);
-	printf("------\n");
-	j = make_jobs(l);
-	print_jobs(j);
-	return 0;
+	t = 8096;
+	env = make_list_from_vector(envp);
+	while (1)
+	{
+		s = NULL;
+		run_prompt();
+		getline(&s, &t, stdin);
+		while (s[i] != '\n' && s[i] != '\0')
+			i++;
+		s[i] = '\0';
+		l = parse_line(s, env);
+		j = make_jobs(l);
+		if (l)
+			exec_job(l, env);
+		free(s);
+	}
 }
