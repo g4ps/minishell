@@ -4,18 +4,20 @@
 /* puropse of those function is to parse an input line into the set of */
 /* evaluated strings (justlike in bash */
 
-static int	dss(char *str1, char *str2)
+/*to norm: header, 9 func, 31 line in *eval*/
+
+static int		dss(char *str1, char *str2)
 {
-	int	len;
+	int			len;
 
 	len = ft_strlen(str2);
 	if (ft_strncmp(str1, str2, len) == 0)
-		return 1;
-	return 0;
+		return (1);
+	return (0);
 }
 
-int	is_sh_symb(char *str)
-{	
+int				is_sh_symb(char *str)
+{
 	if (dss(str, ">>"))
 		return (2);
 	if (dss(str, ";") || dss(str, "\'") || dss(str, "\"")
@@ -25,9 +27,9 @@ int	is_sh_symb(char *str)
 	return (0);
 }
 
-char	*eval_var(char *str, t_list *envp)
+char			*eval_var(char *str, t_list *envp)
 {
-	char	*ret;
+	char		*ret;
 
 	ret = get_var(str, envp);
 	if (ret == NULL)
@@ -35,14 +37,13 @@ char	*eval_var(char *str, t_list *envp)
 	return (ret);
 }
 
-
-char	*eval(char *str, t_list *envp)
+char			*eval(char *str, t_list *envp)
 {
-	char	*s;
-	char	*prec;
-	char	*var;
-	char	*ret;
-	char	*st;
+	char		*s;
+	char		*prec;
+	char		*var;
+	char		*ret;
+	char		*st;
 
 	st = str;
 	s = str;
@@ -53,7 +54,7 @@ char	*eval(char *str, t_list *envp)
 		str++;
 	}
 	if (*str == '\0')
-		return s;
+		return (s);
 	prec = ft_calloc(sizeof(char), dq_len_n(s, str - s) + 1);
 	dq_strncpy(prec, s, str - s);
 	s = str;
@@ -68,19 +69,19 @@ char	*eval(char *str, t_list *envp)
 	ret = ft_strjoin(ret, str);
 	free(prec);
 	free(st);
-	return ret;
+	return (ret);
 }
 
-t_inp	*eval_token(t_inp* tok, t_list *envp)
+t_inp			*eval_token(t_inp *tok, t_list *envp)
 {
 	tok->token = eval(tok->token, envp);
-	return tok;
+	return (tok);
 }
 
-t_inp	*get_quote(char **str)
+t_inp			*get_quote(char **str)
 {
-	char	*s;
-	t_inp	*ret;
+	char		*s;
+	t_inp		*ret;
 
 	(*str)++;
 	s = *str;
@@ -96,18 +97,18 @@ t_inp	*get_quote(char **str)
 	return (ret);
 }
 
-t_inp	*get_dquote(char **str)
+t_inp			*get_dquote(char **str)
 {
-	char	*s;
-	t_inp	*ret;
-	
+	char		*s;
+	t_inp		*ret;
+
 	(*str)++;
 	s = *str;
 	while (**str != '\"' && **str != '\0')
 	{
 		if (**str == '\\' && *(*str + 1) == '\"')
-		       (*str) += 2;
-		else	
+			(*str) += 2;
+		else
 			(*str)++;
 	}
 	ret = ft_calloc(sizeof(t_inp), 1);
@@ -118,11 +119,11 @@ t_inp	*get_dquote(char **str)
 	return (ret);
 }
 
-t_inp	*get_normal(char **str)
+t_inp			*get_normal(char **str)
 {
-	char	*s;
-	int	n;
-	t_inp	*ret;
+	char		*s;
+	int			n;
+	t_inp		*ret;
 
 	s = *str;
 	if ((n = is_sh_symb(*str)))
@@ -138,9 +139,9 @@ t_inp	*get_normal(char **str)
 	return (ret);
 }
 
-t_inp	*get_arg(char **str, t_list *envp)
+t_inp			*get_arg(char **str, t_list *envp)
 {
-	char	*s;
+	char		*s;
 
 	while (ft_isspace(**str))
 	{
@@ -151,6 +152,6 @@ t_inp	*get_arg(char **str, t_list *envp)
 	else if (**str == '\"')
 		return (eval_token(get_dquote(str), envp));
 	else if (**str == '\0')
-		return NULL;
+		return (NULL);
 	return (eval_token(get_normal(str), envp));
 }

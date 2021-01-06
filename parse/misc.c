@@ -11,7 +11,7 @@ t_list	*make_list_from_vector(char **vec)
 		ft_lstadd_back(&ret, ft_lstnew(*vec));
 		vec++;
 	}
-	return ret;
+	return (ret);
 }
 
 char	*get_prog_name(t_list *job)
@@ -24,9 +24,9 @@ char	*get_prog_name(t_list *job)
 
 char	**mvfl(t_list *l)
 {
-	int	i;
+	int		i;
 	char	**ret;
-	int	n;
+	int		n;
 
 	i = 0;
 	n = ft_lstsize(l);

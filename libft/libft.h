@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fthemis <fthemis@student.21-school>        +#+  +:+       +#+        */
+/*   By: teevee <teevee@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/29 16:22:58 by fthemis           #+#    #+#             */
-/*   Updated: 2020/11/05 14:44:16 by fthemis          ###   ########.fr       */
+/*   Updated: 2021/01/06 19:12:41 by teevee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void				*ft_memset(void *b, int c, unsigned long n);
 void				*ft_bzero(void *b, unsigned long n);
 void				*ft_memcpy(void *dst, const void *src, unsigned long n);
 void				*ft_memccpy(void *dst,
-		const void *src, int c, unsigned long n);
+					const void *src, int c, unsigned long n);
 void				*ft_memmove(void *dst, void *src, unsigned long n);
 void				*ft_memchr(const void *s, int c, unsigned long n);
 int					ft_memcmp(const void *s1, const void *s2, unsigned long n);
@@ -46,7 +46,7 @@ void				*ft_calloc(unsigned long l1, unsigned long l2);
 char				*ft_strdup(const char *s1);
 
 char				*ft_substr(char const *s,
-		unsigned int start, unsigned long len);
+					unsigned int start, unsigned long len);
 char				*ft_strjoin(char const *s1, const char *s2);
 char				*ft_strtrim(char const *s1, char const *set);
 char				**ft_split(char const *s, char c);
@@ -73,7 +73,7 @@ void				ft_lstdelone(t_list *lst, void (*del)(void*));
 void				ft_lstclear(t_list **lst, void (*del)(void*));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst,
-		void *(*f)(void *), void (*del)(void *));
+					void *(*f)(void *), void (*del)(void *));
 
 long				ft_atoil(char *str);
 int					ft_isspace(int c);
@@ -83,6 +83,6 @@ char				*ft_ltoa(long x);
 char				*ft_ltoa_x(unsigned long arg, int cas);
 float				ft_atof(char *buf);
 void				*ft_lstindex(t_list *l, int i);
-int				ft_strcmp(char *str1, char *str2);
+int					ft_strcmp(char *str1, char *str2);
 
 #endif
