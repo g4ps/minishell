@@ -2,10 +2,10 @@
 #include <dirent.h>
 #include "minishell.h"
 
-void	free_vec(char **vec)
+void				free_vec(char **vec)
 {
-	char **s;
-	char **n;
+	char			**s;
+	char			**n;
 
 	if (vec == NULL)
 		return ;
@@ -20,10 +20,10 @@ void	free_vec(char **vec)
 	free(s);
 }
 
-char*	get_var(char *var_name, t_list *envp)
+char				*get_var(char *var_name, t_list *envp)
 {
-	int	len;
-	char	*s;
+	int				len;
+	char			*s;
 
 	len = ft_strlen(var_name);
 	while (envp)
@@ -35,45 +35,45 @@ char*	get_var(char *var_name, t_list *envp)
 				s++;
 			if (*s == '=')
 				s++;
-			return s;
+			return (s);
 		}
 		envp = envp->next;
 	}
-	return NULL;
+	return (NULL);
 }
 
-char**	parse_path(char *str)
+char				**parse_path(char *str)
 {
-	char **ret;
-	char **t;
+	char			**ret;
+	char			**t;
 
 	ret = ft_split(str, ':');
 	return (ret);
 }
 
-int	find_in_dir(char *dir, char *file)
+int					find_in_dir(char *dir, char *file)
 {
-	DIR* d;
-	struct dirent *cont;
+	DIR				*d;
+	struct dirent	*cont;
 
 	if ((d = opendir(dir)) == NULL)
-		return -1;
+		return (-1);
 	while ((cont = readdir(d)) != NULL)
 	{
 		if (ft_strncmp(file, cont->d_name, 100) == 0)
 		{
 			closedir(d);
-			return 1;
+			return (1);
 		}
 	}
 	closedir(d);
-	return 0;
+	return (0);
 }
 
-char *get_fn(char **dirs, char *str)
+char				*get_fn(char **dirs, char *str)
 {
-	char	*ret;
-	char	*t;
+	char			*ret;
+	char			*t;
 
 	while (*dirs)
 	{
@@ -82,26 +82,25 @@ char *get_fn(char **dirs, char *str)
 			t = ft_strjoin(*dirs, "/");
 			ret = ft_strjoin(t, str);
 			free(t);
-			return ret;
+			return (ret);
 		}
 		dirs++;
 	}
-	return NULL;
+	return (NULL);
 }
 
-
-char	*get_path(char *str, t_list *envp)
+char				*get_path(char *str, t_list *envp)
 {
-	char	*path;
-	char	**dirs;
-	char	*ret;
+	char			*path;
+	char			**dirs;
+	char			*ret;
 
 	if (ft_strchr(str, '/') != NULL)
 		return (str);
 	if ((path = get_var("PATH", envp)) == NULL)
-		return NULL;
+		return (NULL);
 	dirs = parse_path(path);
 	ret = get_fn(dirs, str);
 	free_vec(dirs);
-	return ret;
+	return (ret);
 }

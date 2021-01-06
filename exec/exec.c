@@ -2,9 +2,9 @@
 #include "libft.h"
 #include "minishell.h"
 
-int	get_in_fd(t_list *job)
+int			get_in_fd(t_list *job)
 {
-	int	ret;
+	int		ret;
 	t_inp	*t;
 	t_list	*prev;
 	char	*f;
@@ -25,18 +25,17 @@ int	get_in_fd(t_list *job)
 			ret = open(f, O_RDONLY);
 			return (ret);
 			if (ret < 0)
-			return (-4);
+				return (-4);
 		}
 		prev = job;
 		job = job->next;
 	}
-	return 0;
+	return (0);
 }
 
-
-int	get_out_fd(t_list *job)
+int			get_out_fd(t_list *job)
 {
-	int	ret;
+	int		ret;
 	t_inp	*t;
 	char	*f;
 	char	*name;
@@ -47,7 +46,8 @@ int	get_out_fd(t_list *job)
 	{
 		t = job->content;
 		f = ((t_inp*)job->content)->token;
-		if ((ft_strcmp(f, ">") == 0 || ft_strcmp(f, ">>") == 0) && !t->is_quoted)
+		if ((ft_strcmp(f, ">") == 0 || ft_strcmp(f, ">>") == 0) \
+		&& !t->is_quoted)
 		{
 			job = job->next;
 			if (prev && job)
@@ -63,10 +63,10 @@ int	get_out_fd(t_list *job)
 		prev = job;
 		job = job->next;
 	}
-	return 0;
+	return (0);
 }
 
-t_fds	parse_for_fds(t_list *job, t_fds *fd)
+t_fds		parse_for_fds(t_list *job, t_fds *fd)
 {
 	t_fds	ret;
 
@@ -83,7 +83,7 @@ t_fds	parse_for_fds(t_list *job, t_fds *fd)
 	return (*fd);
 }
 
-int	is_builtin(char *s)
+int			is_builtin(char *s)
 {
 	if (ft_strcmp(s, "echo") == 0 ||
 		ft_strcmp(s, "cd") == 0 ||
@@ -92,11 +92,11 @@ int	is_builtin(char *s)
 		ft_strcmp(s, "unset") == 0 ||
 		ft_strcmp(s, "env") == 0 ||
 		ft_strcmp(s, "exit") == 0)
-		return 1;
-	return 0;
+		return (1);
+	return (0);
 }
 
-int	run_builtin(t_fds fd, t_list *job, t_env envp)
+int			run_builtin(t_fds fd, t_list *job, t_env envp)
 {
 	char	*l;
 
@@ -115,13 +115,13 @@ int	run_builtin(t_fds fd, t_list *job, t_env envp)
 		return (run_env(fd, job->next, envp));
 	else if (ft_strcmp(l, "exit") == 0)
 		return (run_exit(fd, job->next, envp));
-	return 0;
+	return (0);
 }
 
-int	run_exec(t_fds fd, t_list *job, t_list *env, char *sh)
+int			run_exec(t_fds fd, t_list *job, t_list *env, char *sh)
 {
 	pid_t	pid;
-	int	status;
+	int		status;
 	char	*name;
 
 	name = get_prog_name(job);
@@ -151,13 +151,13 @@ int	run_exec(t_fds fd, t_list *job, t_list *env, char *sh)
 	return (-3);
 }
 
-int	exec_job(t_list *job, t_env env, char *sh, t_fds *fds)
+int			exec_job(t_list *job, t_env env, char *sh, t_fds *fds)
 {
-	int	ret;
+	int		ret;
 
 	if (is_piped(job))
 	{
-		return exec_pipe(job, env, sh, fds);
+		return (exec_pipe(job, env, sh, fds));
 	}
 	else
 	{
@@ -170,13 +170,13 @@ int	exec_job(t_list *job, t_env env, char *sh, t_fds *fds)
 	}
 }
 
-int	execute(t_list *job, t_env env, char *sh, t_fds *fds)
+int			execute(t_list *job, t_env env, char *sh, t_fds *fds)
 {
-	int	ret;
+	int		ret;
 
 	if (is_piped(job))
 	{
-		return exec_pipe(job, env, sh, fds);
+		return (exec_pipe(job, env, sh, fds));
 	}
 	else
 	{
@@ -189,10 +189,9 @@ int	execute(t_list *job, t_env env, char *sh, t_fds *fds)
 	}
 }
 
-
-int	exec_line(t_list *jobs, t_env env, char *sh)
+int			exec_line(t_list *jobs, t_env env, char *sh)
 {
-	int	ret;
+	int		ret;
 	char	*err;
 	char	*p_name;
 	t_fds	fd;

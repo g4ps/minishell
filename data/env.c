@@ -18,7 +18,7 @@ t_list	*list_comb(t_env env)
 		ft_lstadd_back(&ret, ft_lstnew(ft_strdup(t.vars->content)));
 		t.vars = t.vars->next;
 	}
-	return ret;
+	return (ret);
 }
 
 t_list	*init_vars(char **argv)

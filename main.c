@@ -7,12 +7,12 @@
 #include "libft.h"
 #include <unistd.h>
 
-void	run_prompt()
+void		run_prompt()
 {
 	ft_putstr_fd("> ", 1);
 }
 
-void	print_vec(char **vec)
+void		print_vec(char **vec)
 {
 	while (*vec)
 	{
@@ -21,29 +21,29 @@ void	print_vec(char **vec)
 	}
 }
 
-void	f1(int k)
+void		f1(int k)
 {
 	ft_putstr_fd("\n", 1);
 	run_prompt();
 }
 
-void	f(int k)
+void		f(int k)
 {
 }
 
-void	my_exit(int i)
+void		my_exit(int i)
 {
 	ft_putstr_fd(" exit\n", 1);
 	exit(0);
 }
 
-void	signal_setup()
+void		signal_setup()
 {
 	signal(SIGQUIT, f);
 	signal(SIGINT, f1);
 }
 
-int main(int argc, char **argv, char **envp)
+int			main(int argc, char **argv, char **envp)
 {
 	char	*s;
 	t_list	*env_p;
@@ -52,9 +52,10 @@ int main(int argc, char **argv, char **envp)
 	t_list	*j;
 	t_list	*vars;
 	size_t	t;
-	int	i = 0;
-	int	last_ret;
+	int		i;
+	int		last_ret;
 
+	i = 0;
 	t = 8096;
 	env_p = make_list_from_vector(envp);
 	vars = init_vars(argv);

@@ -3,18 +3,18 @@
 #include <fcntl.h>
 #include "minishell.h"
 
-int	is_piped(t_list *job)
+int			is_piped(t_list *job)
 {
 	while (job)
 	{
 		if (ft_strcmp(((t_inp*)job->content)->token, "|") == 0)
-			return 1;
+			return (1);
 		job = job->next;
 	}
-	return 0;
+	return (0);
 }
 
-t_list	*get_last_job(t_list **l)
+t_list		*get_last_job(t_list **l)
 {
 	t_list	*c;
 	t_list	*prev;
@@ -39,17 +39,17 @@ t_list	*get_last_job(t_list **l)
 	}
 	prev = NULL;
 	if (s)
-	s->next = NULL;
+		s->next = NULL;
 	return (t);
 }
 
-int	exec_pipe(t_list *job, t_env env, char *sh, t_fds *fds)
+int			exec_pipe(t_list *job, t_env env, char *sh, t_fds *fds)
 {
 	t_list	*pr_j;
-	int	f[2];
+	int		f[2];
 	pid_t	pid;
-	int	status;
-	int	opt;
+	int		status;
+	int		opt;
 	t_fds	fd;
 
 	pr_j = get_last_job(&job);
@@ -71,7 +71,7 @@ int	exec_pipe(t_list *job, t_env env, char *sh, t_fds *fds)
 		fd.out_fd = fds->out_fd;
 		exec_job(job, env, sh, &fd);
 		waitpid(pid, &status, 0);
-		return WEXITSTATUS(status);
+		return (WEXITSTATUS(status));
 	}
-	return -6;
+	return (-6);
 }

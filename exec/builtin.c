@@ -2,7 +2,7 @@
 #include "minishell.h"
 #include <unistd.h>
 
-int	run_echo(t_fds fd, t_list *job, t_env env)
+int			run_echo(t_fds fd, t_list *job, t_env env)
 {
 	char	*k;
 	t_list	*envp;
@@ -19,9 +19,9 @@ int	run_echo(t_fds fd, t_list *job, t_env env)
 	return (0);
 }
 
-int	run_cd(t_fds fd, t_list *job, t_env env)
+int			run_cd(t_fds fd, t_list *job, t_env env)
 {
-	int	ret;
+	int		ret;
 	char	*k;
 	t_list	*envp;
 
@@ -31,7 +31,7 @@ int	run_cd(t_fds fd, t_list *job, t_env env)
 	return (ret);
 }
 
-int	run_pwd(t_fds fd, t_list *job, t_env env)
+int			run_pwd(t_fds fd, t_list *job, t_env env)
 {
 	char	*k;
 	t_list	*envp;
@@ -43,27 +43,27 @@ int	run_pwd(t_fds fd, t_list *job, t_env env)
 	return (0);
 }
 
-int	run_export(t_fds fd, t_list *job, t_env env)
+int			run_export(t_fds fd, t_list *job, t_env env)
 {
-	return 0;
+	return (0);
 }
 
-int	run_unset(t_fds fd, t_list *job, t_env env)
+int			run_unset(t_fds fd, t_list *job, t_env env)
 {
-	return 0;
+	return (0);
 }
 
-int	run_env(t_fds fd, t_list *job, t_env env)
+int			run_env(t_fds fd, t_list *job, t_env env)
 {
 	t_list	*envp;
 
 	print_list(env.envp);
-	return 0;
+	return (0);
 }
 
-int	run_exit(t_fds fd, t_list *job, t_env env)
+int			run_exit(t_fds fd, t_list *job, t_env env)
 {
-	int	k;
+	int		k;
 	char	*s;
 
 	if (job)
