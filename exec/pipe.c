@@ -14,56 +14,62 @@ int	is_piped(t_list *job)
 	return 0;
 }
 
-t_list	*get_prev_job(t_list **l)
+t_list	*get_last_job(t_list **l)
 {
 	t_list	*c;
 	t_list	*prev;
 	t_list	*s;
+	t_list	*t;
 	char	*tk;
 
-	s = *l;
+	s = NULL;
 	prev = NULL;
+	t = *l;
 	c = *l;
 	while (c)
 	{
 		tk = ((t_inp*)c->content)->token;
 		if (ft_strcmp(tk, "|") == 0)
 		{
-			if (prev == NULL)
-				return NULL;
-			prev->next = NULL;
-			*l = c->next;
-			return (s);
+			t = c->next;
+			s = prev;
 		}
 		prev = c;
 		c = c->next;
 	}
-	return (s);
+	prev = NULL;
+	if (s)
+	s->next = NULL;
+	return (t);
 }
 
-int	exec_pipe(t_list *job, t_env env, char *sh, t_fds fds)
+int	exec_pipe(t_list *job, t_env env, char *sh, t_fds *fds)
 {
 	t_list	*pr_j;
 	int	f[2];
 	pid_t	pid;
 	int	status;
 	int	opt;
+	t_fds	fd;
 
-	pr_j = get_prev_job(&job);
+	pr_j = get_last_job(&job);
 	if (pipe(f) < 0)
 		return (-5);
 	pid = fork();
 	if (pid == 0)
 	{
-		close(f[1]);
-		dup2(f[0], 0);
-		exit(exec_job(pr_j, env, sh, fds));
+		close(f[0]);
+		fd.out_fd = f[1];
+		fd.in_fd = fds->out_fd;
+		exec_job(pr_j, env, sh, &fd);
 	}
 	else if (pid > 0)
 	{
-		close(f[0]);
-		fds.out_fd = f[1];
-		exec_job(job, env, sh, fds);
+		close(f[1]);
+		printf("%d\n", f[1]);
+		fd.in_fd = f[0];
+		fd.out_fd = fds->out_fd;
+		exec_job(job, env, sh, &fd);
 		waitpid(pid, &status, 0);
 		return WEXITSTATUS(status);
 	}

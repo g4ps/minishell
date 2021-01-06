@@ -23,6 +23,7 @@ int	get_in_fd(t_list *job)
 				return (-2);
 			f = ((t_inp*)job->content)->token;
 			ret = open(f, O_RDONLY);
+			return (ret);
 			if (ret < 0)
 			return (-4);
 		}
@@ -62,7 +63,7 @@ int	get_out_fd(t_list *job)
 		prev = job;
 		job = job->next;
 	}
-	return 1;
+	return 0;
 }
 
 t_fds	parse_for_fds(t_list *job, t_fds *fd)
@@ -71,10 +72,14 @@ t_fds	parse_for_fds(t_list *job, t_fds *fd)
 
 	ret.in_fd = get_in_fd(job);
 	ret.out_fd = get_out_fd(job);
-	if (ret.in_fd != 0 || fd->in_fd == 0)
+	if (ret.in_fd != 0)
 		fd->in_fd = ret.in_fd;
-	if (ret.out_fd != 1 || fd->out_fd == 1)
+	else
+		fd->in_fd = 0;
+	if (ret.out_fd != 0)
 		fd->out_fd = ret.out_fd;
+	else
+		fd->out_fd = 1;
 	return (*fd);
 }
 
@@ -146,25 +151,43 @@ int	run_exec(t_fds fd, t_list *job, t_list *env, char *sh)
 	return (-3);
 }
 
-int	exec_job(t_list *job, t_env env, char *sh, t_fds fd)
+int	exec_job(t_list *job, t_env env, char *sh, t_fds *fds)
 {
 	int	ret;
 
 	if (is_piped(job))
 	{
-		return exec_pipe(job, env, sh, fd);
+		return exec_pipe(job, env, sh, fds);
 	}
 	else
 	{
 		ret = -1;
-		parse_for_fds(job, &fd);
+		parse_for_fds(job, fds);
 		if (is_builtin(((t_inp*)job->content)->token))
-			return (run_builtin(fd, job, env));
-		ret = run_exec(fd, job, list_comb(env), sh);
+			return (run_builtin(*fds, job, env));
+		ret = run_exec(*fds, job, list_comb(env), sh);
 		return (ret);
 	}
 }
 
+int	execute(t_list *job, t_env env, char *sh, t_fds *fds)
+{
+	int	ret;
+
+	if (is_piped(job))
+	{
+		return exec_pipe(job, env, sh, fds);
+	}
+	else
+	{
+		ret = -1;
+		parse_for_fds(job, fds);
+		if (is_builtin(((t_inp*)job->content)->token))
+			return (run_builtin(*fds, job, env));
+		ret = run_exec(*fds, job, list_comb(env), sh);
+		return (ret);
+	}
+}
 
 
 int	exec_line(t_list *jobs, t_env env, char *sh)
@@ -179,7 +202,7 @@ int	exec_line(t_list *jobs, t_env env, char *sh)
 	while (jobs)
 	{
 		p_name = ((t_inp*)((t_list*)jobs->content)->content)->token;
-		ret = exec_job(jobs->content, env, sh, fd);
+		ret = exec_job(jobs->content, env, sh, &fd);
 		if (ret < 0)
 		{
 			print_err(ret, sh, p_name);
