@@ -18,6 +18,12 @@ typedef struct	s_fds
 	int	out_fd;
 }		t_fds;
 
+typedef	struct	s_env
+{
+	t_list	*envp;
+	t_list	*vars;
+}		t_env;
+
 char	*get_var(char *var_name, t_list *envp);
 char	**parse_path(char *str);
 char	*get_path(char *str, t_list *envp);
@@ -28,6 +34,7 @@ char	*eval_var(char *str, t_list *envp);
 /* debug funciton */
 void	print_line(t_list* l);
 void	print_jobs(t_list* l);
+void	print_list(t_list *l);
 /* ----------------- */
 
 t_list	*parse_line(char *str, t_list *envp);
@@ -38,15 +45,14 @@ char	*get_prog_name(t_list *job);
 char	**mvfl(t_list *l);
 char	**mvfl_t(t_list *l);
 
-int	run_cd(t_fds fd, t_list *job, t_list *env);
-int	run_echo(t_fds fd, t_list *job, t_list *env);
-int	run_pwd(t_fds fd, t_list *job, t_list *env);
-int	run_export(t_fds fd, t_list *job, t_list *env);
-int	run_unset(t_fds fd, t_list *job, t_list *env);
-int	run_env(t_fds fd, t_list *job, t_list *env);
-int	run_exit(t_fds fd, t_list *job, t_list *env);
-int	exec_job(t_list *job, t_list *env, char *sh);
-int	exec_line(t_list *jobs, t_list *env, char *sh);
+int	run_cd(t_fds fd, t_list *job, t_env env);
+int	run_echo(t_fds fd, t_list *job, t_env nv);
+int	run_pwd(t_fds fd, t_list *job, t_env env);
+int	run_export(t_fds fd, t_list *job, t_env env);
+int	run_unset(t_fds fd, t_list *job, t_env env);
+int	run_env(t_fds fd, t_list *job, t_env env);
+int	run_exit(t_fds fd, t_list *job, t_env env);
+int	exec_line(t_list *jobs, t_env env, char *sh);
 void	print_err(int err, char *sh, char *p);
 void	f(int);
 void	f1(int);
@@ -55,5 +61,9 @@ int	is_spec_symb(const char *s);
 int	dq_len(const char *str);
 int	dq_len_n(const char *str, int n);
 char	*dq_strncpy(char *dst, const char *str, int n);
+
+t_list	*list_comb(t_env env);
+t_list 	*init_vars(char **v);
+void	update_return(t_list **l, int k);
 
 #endif

@@ -46,14 +46,20 @@ void	signal_setup()
 int main(int argc, char **argv, char **envp)
 {
 	char	*s;
-	t_list	*env;
+	t_list	*env_p;
 	t_list	*l;
+	t_env	env;
 	t_list	*j;
+	t_list	*vars;
 	size_t	t;
 	int	i = 0;
+	int	last_ret;
 
 	t = 8096;
-	env = make_list_from_vector(envp);
+	env_p = make_list_from_vector(envp);
+	vars = init_vars(argv);
+	env.envp = env_p;
+	env.vars = vars;
 	signal_setup();
 	while (1)
 	{
@@ -64,10 +70,10 @@ int main(int argc, char **argv, char **envp)
 		while (s[i] != '\n' && s[i] != '\0')
 			i++;
 		s[i] = '\0';
-		l = parse_line(s, env);
+		l = parse_line(s, list_comb(env));
 		j = make_jobs(l);
 		if (l && j)
-			exec_line(j, env, argv[0]);
-		free(s);
+			last_ret = exec_line(j, env, argv[0]);
+		update_return(&vars, last_ret);
 	}
 }

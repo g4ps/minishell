@@ -39,21 +39,3 @@ char	**mvfl(t_list *l)
 	}
 	return (ret);
 }
-
-char	**mvfl_t(t_list *l)
-{
-	int	i;
-	char	**ret;
-	int	n;
-
-	i = 0;
-	n = ft_lstsize(l);
-	ret = ft_calloc(sizeof(char**), n + 1);
-	while (l)
-	{
-		ret[i] = ft_strdup(((t_inp*)l->content)->token);
-		i++;
-		l = l->next;
-	}
-	return (ret);
-}

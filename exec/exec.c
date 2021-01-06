@@ -85,7 +85,7 @@ int	is_builtin(char *s)
 	return 0;
 }
 
-int	run_builtin(t_fds fd, t_list *job, t_list *envp)
+int	run_builtin(t_fds fd, t_list *job, t_env envp)
 {
 	char	*l;
 
@@ -140,19 +140,19 @@ int	run_exec(t_fds fd, t_list *job, t_list *env, char *sh)
 	return (-3);
 }
 
-int	exec_job(t_list *job, t_list *envp, char *sh)
+int	exec_job(t_list *job, t_env env, char *sh)
 {
 	int	ret;
 	t_fds	fd;
 
 	fd = parse_for_fds(job);
 	if (is_builtin(((t_inp*)job->content)->token))
-		return (run_builtin(fd, job, envp));
-	ret = run_exec(fd, job, envp, sh);
+		return (run_builtin(fd, job, env));
+	ret = run_exec(fd, job, list_comb(env), sh);
 	return (ret);
 }
 
-int	exec_line(t_list *jobs, t_list *env, char *sh)
+int	exec_line(t_list *jobs, t_env env, char *sh)
 {
 	int	ret;
 	char	*err;
