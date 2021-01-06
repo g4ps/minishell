@@ -19,10 +19,12 @@ int	get_in_fd(t_list *job)
 			job = job->next;
 			if (prev && job)
 				prev->next = job->next;
-			f = ((t_inp*)job->content)->token;
 			if (job == NULL || !prev || !job)
 				return (-2);
-			return (open(f, O_RDONLY));
+			f = ((t_inp*)job->content)->token;
+			ret = open(f, O_RDONLY);
+			if (ret < 0)
+			return (-4);
 		}
 		prev = job;
 		job = job->next;
@@ -145,10 +147,12 @@ int	exec_job(t_list *job, t_env env, char *sh)
 	int	ret;
 	t_fds	fd;
 
+	ret = -1;
 	fd = parse_for_fds(job);
 	if (is_builtin(((t_inp*)job->content)->token))
 		return (run_builtin(fd, job, env));
-	ret = run_exec(fd, job, list_comb(env), sh);
+	if (!is_piped(job))
+		ret = run_exec(fd, job, list_comb(env), sh);
 	return (ret);
 }
 

@@ -51,13 +51,15 @@ t_list*	make_jobs(t_list *line)
 	t_list	*ret;
 	t_list	*s;
 	t_list	*prev;
+	char	*tk;
 
 	ret = NULL;
 	prev = NULL;
 	s = line;
 	while (line)
 	{
-		if (ft_strcmp(((t_inp*)line->content)->token, ";") == 0)
+		tk = ((t_inp*)line->content)->token;
+		if (ft_strcmp(tk, ";") == 0)
 		{
 			prev->next = NULL;
 			ft_lstadd_back(&ret, ft_lstnew(s));

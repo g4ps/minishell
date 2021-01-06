@@ -1,4 +1,4 @@
-EXEC_SRCS = find.c exec.c builtin.c
+EXEC_SRCS = find.c exec.c builtin.c pipe.c
 EXEC_DIR = exec/
 EXEC_SRCS := $(EXEC_SRCS:%=$(EXEC_DIR)%)
 EXEC_OBJS = $(EXEC_SRCS:.c=.o)

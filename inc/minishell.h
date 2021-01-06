@@ -23,6 +23,11 @@ typedef	struct	s_env
 	t_list	*envp;
 	t_list	*vars;
 }		t_env;
+typedef	struct	s_job
+{
+	t_list	*job;
+	char	kind;
+}		t_job;
 
 char	*get_var(char *var_name, t_list *envp);
 char	**parse_path(char *str);
@@ -65,5 +70,7 @@ char	*dq_strncpy(char *dst, const char *str, int n);
 t_list	*list_comb(t_env env);
 t_list 	*init_vars(char **v);
 void	update_return(t_list **l, int k);
+
+int	is_piped(t_list *j);
 
 #endif
