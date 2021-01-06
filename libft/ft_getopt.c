@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_getopt.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: teevee <teevee@student.21-school.ru>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/06 19:06:09 by teevee            #+#    #+#             */
+/*   Updated: 2021/01/06 19:08:40 by teevee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-static int	parse_arg(char a, char *p)
+static int		parse_arg(char a, char *p)
 {
 	while (*p)
 	{
@@ -11,12 +23,12 @@ static int	parse_arg(char a, char *p)
 	return (256);
 }
 
-int	get_opt(int argc, char **argv, char *param)
+int				get_opt(int argc, char **argv, char *param)
 {
 	static int	i = 0;
 	static int	pos = 0;
 	char		*k;
-	int		ret;
+	int			ret;
 
 	if (i == 0)
 		i++;
@@ -27,7 +39,7 @@ int	get_opt(int argc, char **argv, char *param)
 		{
 			ret = parse_arg(k + 1 + pos, param);
 			pos++;
-			return ret;
+			return (ret);
 		}
 		pos = 0;
 		i++;

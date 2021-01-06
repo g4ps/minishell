@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atof_bonus.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: teevee <teevee@student.21-school.ru>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/06 19:06:30 by teevee            #+#    #+#             */
+/*   Updated: 2021/01/06 19:08:11 by teevee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-float	ft_atof(char *buf)
+float			ft_atof(char *buf)
 {
-	double	ret;
-	int	dot;
-	double	div;
-	int	sign;
+	double		ret;
+	int			dot;
+	double		div;
+	int			sign;
 
 	ret = 0;
 	sign = 1;
@@ -26,10 +38,10 @@ float	ft_atof(char *buf)
 		else
 		{
 			if (dot)
-				return 0;
+				return (0);
 			dot = 1;
 		}
 		buf++;
 	}
-	return sign * ret / div;
+	return (sign * ret / div);
 }

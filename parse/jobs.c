@@ -1,10 +1,11 @@
 #include "minishell.h"
 #include "libft.h"
+
 /* debug function */
 
 void	print_line(t_list *l)
 {
-	int	i;
+	int		i;
 	t_inp	*t;
 
 	i = 1;
@@ -31,10 +32,9 @@ void	print_jobs(t_list *l)
 	}
 }
 
-
 /* ---------------- */
 
-t_list*	parse_line(char *str, t_list *envp)
+t_list	*parse_line(char *str, t_list *envp)
 {
 	t_list	*ret;
 	t_inp	*s;
@@ -44,10 +44,10 @@ t_list*	parse_line(char *str, t_list *envp)
 	{
 		ft_lstadd_back(&ret, ft_lstnew(s));
 	}
-	return ret;
+	return (ret);
 }
 
-t_list*	make_jobs(t_list *line)
+t_list	*make_jobs(t_list *line)
 {
 	t_list	*ret;
 	t_list	*s;
@@ -59,7 +59,7 @@ t_list*	make_jobs(t_list *line)
 	s = line;
 	while (line)
 	{
-		tk = ((t_inp*)line->content)->token;
+		tk = ((t_inp *)line->content)->token;
 		if (ft_strcmp(tk, ";") == 0)
 		{
 			prev->next = NULL;
@@ -70,6 +70,5 @@ t_list*	make_jobs(t_list *line)
 		line = line->next;
 	}
 	ft_lstadd_back(&ret, ft_lstnew(s));
-	return ret;
+	return (ret);
 }
-
