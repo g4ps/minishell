@@ -5,7 +5,7 @@ EXEC_OBJS = $(EXEC_SRCS:.c=.o)
 
 OBJS += $(EXEC_OBJS)
 
-PARSE_SRCS = parse.c jobs.c misc.c err.c
+PARSE_SRCS = parse.c jobs.c misc.c err.c shell_stuff.c
 PARSE_DIR = parse/
 PARSE_SRCS := $(PARSE_SRCS:%=$(PARSE_DIR)%)
 PARSE_OBJS = $(PARSE_SRCS:.c=.o)

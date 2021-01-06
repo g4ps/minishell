@@ -51,4 +51,9 @@ void	print_err(int err, char *sh, char *p);
 void	f(int);
 void	f1(int);
 
+int	is_spec_symb(const char *s);
+int	dq_len(const char *str);
+int	dq_len_n(const char *str, int n);
+char	*dq_strncpy(char *dst, const char *str, int n);
+
 #endif

@@ -47,16 +47,20 @@ char	*eval(char *str, t_list *envp)
 	st = str;
 	s = str;
 	while (*str != '$' && *str != '\0')
+	{
+		if (is_spec_symb(str))
+			str++;
 		str++;
+	}
 	if (*str == '\0')
 		return s;
-	prec = ft_calloc(sizeof(char), str - s + 2);
-	ft_strlcpy(prec, s, str - s + 1);
+	prec = ft_calloc(sizeof(char), dq_len_n(s, str - s) + 1);
+	dq_strncpy(prec, s, str - s);
 	s = str;
 	while (!ft_isspace(*str) && *str != '\0')
 		str++;
-	var = ft_calloc(sizeof(char), str - s + 2);
-	ft_strlcpy(var, s + 1, str - s);
+	var = ft_calloc(sizeof(char), dq_len_n(s, str - s) + 2);
+	dq_strncpy(var, s + 1, str - s - 1);
 	var = eval_var(var, envp);
 	ret = ft_strjoin(prec, var);
 	free(prec);
