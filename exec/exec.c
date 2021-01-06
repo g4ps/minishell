@@ -65,13 +65,17 @@ int	get_out_fd(t_list *job)
 	return 1;
 }
 
-t_fds	parse_for_fds(t_list *job)
+t_fds	parse_for_fds(t_list *job, t_fds *fd)
 {
 	t_fds	ret;
 
 	ret.in_fd = get_in_fd(job);
 	ret.out_fd = get_out_fd(job);
-	return (ret);
+	if (ret.in_fd != 0 || fd->in_fd == 0)
+		fd->in_fd = ret.in_fd;
+	if (ret.out_fd != 1 || fd->out_fd == 1)
+		fd->out_fd = ret.out_fd;
+	return (*fd);
 }
 
 int	is_builtin(char *s)
@@ -125,7 +129,7 @@ int	run_exec(t_fds fd, t_list *job, t_list *env, char *sh)
 	if (pid > 0)
 	{
 		signal(SIGINT, f);
-		wait(&status);
+		waitpid(pid, &status, 0);
 		signal(SIGINT, f1);
 		return (WEXITSTATUS(status));
 	}
@@ -142,30 +146,40 @@ int	run_exec(t_fds fd, t_list *job, t_list *env, char *sh)
 	return (-3);
 }
 
-int	exec_job(t_list *job, t_env env, char *sh)
+int	exec_job(t_list *job, t_env env, char *sh, t_fds fd)
 {
 	int	ret;
-	t_fds	fd;
 
-	ret = -1;
-	fd = parse_for_fds(job);
-	if (is_builtin(((t_inp*)job->content)->token))
-		return (run_builtin(fd, job, env));
-	if (!is_piped(job))
+	if (is_piped(job))
+	{
+		return exec_pipe(job, env, sh, fd);
+	}
+	else
+	{
+		ret = -1;
+		parse_for_fds(job, &fd);
+		if (is_builtin(((t_inp*)job->content)->token))
+			return (run_builtin(fd, job, env));
 		ret = run_exec(fd, job, list_comb(env), sh);
-	return (ret);
+		return (ret);
+	}
 }
+
+
 
 int	exec_line(t_list *jobs, t_env env, char *sh)
 {
 	int	ret;
 	char	*err;
 	char	*p_name;
+	t_fds	fd;
 
+	fd.in_fd = 0;
+	fd.out_fd = 1;
 	while (jobs)
 	{
 		p_name = ((t_inp*)((t_list*)jobs->content)->content)->token;
-		ret = exec_job(jobs->content, env, sh);
+		ret = exec_job(jobs->content, env, sh, fd);
 		if (ret < 0)
 		{
 			print_err(ret, sh, p_name);

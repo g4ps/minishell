@@ -73,4 +73,6 @@ void	update_return(t_list **l, int k);
 
 int	is_piped(t_list *j);
 
+int	exec_job(t_list *job, t_env env, char *sh, t_fds fd);
+
 #endif
