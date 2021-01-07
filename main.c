@@ -51,6 +51,7 @@ int			main(int argc, char **argv, char **envp)
 	t_env	env;
 	t_list	*j;
 	t_list	*vars;
+	t_list	*e;
 	size_t	t;
 	int		i;
 	int		last_ret;
@@ -64,6 +65,7 @@ int			main(int argc, char **argv, char **envp)
 	signal_setup();
 	while (1)
 	{
+		e = list_comb(env);
 		s = NULL;
 		run_prompt();
 		if (getline(&s, &t, stdin) == EOF)
@@ -71,10 +73,13 @@ int			main(int argc, char **argv, char **envp)
 		while (s[i] != '\n' && s[i] != '\0')
 			i++;
 		s[i] = '\0';
-		l = parse_line(s, list_comb(env));
+		l = parse_line(s, e);
 		j = make_jobs(l);
 		if (l && j)
 			last_ret = exec_line(j, env, argv[0]);
+		ft_lstclear(&l, del_inp);
+		ft_lstclear(&e, free);
+		free(s);
 		update_return(&vars, last_ret);
 	}
 }

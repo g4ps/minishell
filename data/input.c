@@ -2,8 +2,11 @@
 #include "libft.h"
 #include "minishell.h"
 
-void		del_inp(t_inp *in)
+void		del_inp(void *i)
 {
+	t_inp	*in;
+
+	in = i;
 	free(in->token);
 	free(in);
 }
@@ -31,6 +34,7 @@ void		update_return(t_list **c, int k)
 	t_list	*prev;
 	t_list	*l;
 	t_list	*next;
+	char	*num;
 
 	prev = NULL;
 	l = *c;
@@ -44,7 +48,9 @@ void		update_return(t_list **c, int k)
 			else
 				*c = next;
 			ft_lstdelone(l, free);
-			ft_lstadd_back(c, ft_lstnew(ft_strjoin("?=", ft_itoa(k))));
+			num = ft_itoa(k);
+			ft_lstadd_back(c, ft_lstnew(ft_strjoin("?=", num)));
+			free(num);
 			return ;
 		}
 		prev = l;

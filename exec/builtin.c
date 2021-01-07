@@ -6,16 +6,23 @@ int			run_echo(t_fds fd, t_list *job, t_env env)
 {
 	char	*k;
 	t_list	*envp;
+	int	nl;
 
-	envp = list_comb(env);
+	nl = 1;
 	while (job)
 	{
 		k = ((t_inp*)job->content)->token;
-		ft_putstr_fd(k, fd.out_fd);
-		ft_putstr_fd(" ", fd.out_fd);
+		if (ft_strcmp(k, "-n") == 0)
+			nl = 0;
+		else
+		{
+			ft_putstr_fd(k, fd.out_fd);
+			ft_putstr_fd(" ", fd.out_fd);
+		}
 		job = job->next;
 	}
-	ft_putstr_fd("\n", fd.out_fd);
+	if (nl)
+		ft_putstr_fd("\n", fd.out_fd);
 	return (0);
 }
 

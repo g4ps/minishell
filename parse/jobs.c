@@ -62,13 +62,17 @@ t_list	*make_jobs(t_list *line)
 		tk = ((t_inp *)line->content)->token;
 		if (ft_strcmp(tk, ";") == 0)
 		{
-			prev->next = NULL;
-			ft_lstadd_back(&ret, ft_lstnew(s));
-			s = line->next;
+			if (prev && s != line)
+			{
+				prev->next = NULL;
+				ft_lstadd_back(&ret, ft_lstnew(s));
+				s = line->next;
+			}
 		}
 		prev = line;
 		line = line->next;
 	}
+
 	ft_lstadd_back(&ret, ft_lstnew(s));
 	return (ret);
 }

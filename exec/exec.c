@@ -130,6 +130,7 @@ int			run_exec(t_fds fd, t_list *job, t_list *env, char *sh)
 	pid = fork();
 	if (pid > 0)
 	{
+		free(name);
 		signal(SIGINT, f);
 		waitpid(pid, &status, 0);
 		signal(SIGINT, f1);
@@ -151,6 +152,7 @@ int			run_exec(t_fds fd, t_list *job, t_list *env, char *sh)
 int			exec_job(t_list *job, t_env env, char *sh, t_fds *fds)
 {
 	int		ret;
+	t_list		*e;
 
 	if (is_piped(job))
 	{
@@ -158,14 +160,16 @@ int			exec_job(t_list *job, t_env env, char *sh, t_fds *fds)
 	}
 	else
 	{
+		e = list_comb(env);
 		ret = -1;
 		*fds = parse_for_fds(job, fds);
 		if (is_builtin(((t_inp*)job->content)->token))
 			ret =  run_builtin(*fds, job, env);
 		else
-			ret = run_exec(*fds, job, list_comb(env), sh);
+			ret = run_exec(*fds, job, e, sh);
 		if (ret < 0)
 			print_err(ret, sh, get_prog_name(job));
+		ft_lstclear(&e, free);
 		return (ret);
 	}
 }
@@ -208,7 +212,6 @@ int			exec_line(t_list *jobs, t_env env, char *sh)
 		p_name = ((t_inp*)((t_list*)jobs->content)->content)->token;
 		ret = exec_job(jobs->content, env, sh, &fd);
 		t = jobs;
-		ft_lstclear(&t, del_inp);
 		jobs = jobs->next;
 	}
 	return (ret);
