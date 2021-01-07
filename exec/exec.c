@@ -77,7 +77,7 @@ t_fds		parse_for_fds(t_list *job, t_fds *fd)
 		ret.in_fd = fd->in_fd;
 	if (ret.out_fd == 0)
 		ret.out_fd = fd->out_fd;
-	return (*fd);
+	return (ret);
 }
 
 int			is_builtin(char *s)
@@ -159,7 +159,7 @@ int			exec_job(t_list *job, t_env env, char *sh, t_fds *fds)
 	else
 	{
 		ret = -1;
-		parse_for_fds(job, fds);
+		*fds = parse_for_fds(job, fds);
 		if (is_builtin(((t_inp*)job->content)->token))
 			return (run_builtin(*fds, job, env));
 		ret = run_exec(*fds, job, list_comb(env), sh);
@@ -179,7 +179,7 @@ int			execute(t_list *job, t_env env, char *sh, t_fds *fds)
 	else
 	{
 		ret = -1;
-		parse_for_fds(job, fds);
+		*fds = parse_for_fds(job, fds);
 		if (is_builtin(((t_inp*)job->content)->token))
 			exit (run_builtin(*fds, job, env));
 		ret = run_exec(*fds, job, list_comb(env), sh);

@@ -67,6 +67,7 @@ int			exec_pipe(t_list *job, t_env env, char *sh, t_fds *fds)
 	{
 		close(f[1]);
 		fd.in_fd = f[0];
+		fd.out_fd = fds->out_fd;
 		exec_job(pr_j, env, sh, &fd);
 		waitpid(pid, &status, 0);
 		return (WEXITSTATUS(status));
