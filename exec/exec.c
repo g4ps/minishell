@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <signal.h>
 #include "libft.h"
 #include "minishell.h"
 
@@ -72,14 +73,10 @@ t_fds		parse_for_fds(t_list *job, t_fds *fd)
 
 	ret.in_fd = get_in_fd(job);
 	ret.out_fd = get_out_fd(job);
-	if (ret.in_fd != 0)
-		fd->in_fd = ret.in_fd;
-	else
-		fd->in_fd = 0;
-	if (ret.out_fd != 0)
-		fd->out_fd = ret.out_fd;
-	else
-		fd->out_fd = 1;
+	if (ret.in_fd == 0)
+		ret.in_fd = fd->in_fd;
+	if (ret.out_fd == 0)
+		ret.out_fd = fd->out_fd;
 	return (*fd);
 }
 
@@ -174,18 +171,19 @@ int			execute(t_list *job, t_env env, char *sh, t_fds *fds)
 {
 	int		ret;
 
+	signal(SIGQUIT, f);
 	if (is_piped(job))
 	{
-		return (exec_pipe(job, env, sh, fds));
+		exit(exec_pipe(job, env, sh, fds));
 	}
 	else
 	{
 		ret = -1;
 		parse_for_fds(job, fds);
 		if (is_builtin(((t_inp*)job->content)->token))
-			return (run_builtin(*fds, job, env));
+			exit (run_builtin(*fds, job, env));
 		ret = run_exec(*fds, job, list_comb(env), sh);
-		return (ret);
+		exit(ret);
 	}
 }
 

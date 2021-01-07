@@ -60,16 +60,14 @@ int			exec_pipe(t_list *job, t_env env, char *sh, t_fds *fds)
 	{
 		close(f[0]);
 		fd.out_fd = f[1];
-		fd.in_fd = fds->out_fd;
-		exec_job(pr_j, env, sh, &fd);
+		fd.in_fd = fds->in_fd;
+		execute(job, env, sh, &fd);
 	}
 	else if (pid > 0)
 	{
 		close(f[1]);
-		printf("%d\n", f[1]);
 		fd.in_fd = f[0];
-		fd.out_fd = fds->out_fd;
-		exec_job(job, env, sh, &fd);
+		exec_job(pr_j, env, sh, &fd);
 		waitpid(pid, &status, 0);
 		return (WEXITSTATUS(status));
 	}

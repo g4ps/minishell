@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <signal.h>
+#include <sys/wait.h>
 #include "libft.h"
 
 typedef	struct	s_inp
@@ -74,6 +76,7 @@ void	update_return(t_list **l, int k);
 int	is_piped(t_list *j);
 
 int	exec_job(t_list *job, t_env env, char *sh, t_fds *fd);
+int	execute(t_list *job, t_env env, char *sh, t_fds *fd);
 int	exec_pipe(t_list *job, t_env env, char *sh, t_fds *fd);
 
 #endif
