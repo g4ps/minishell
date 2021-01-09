@@ -6,7 +6,7 @@
 /*   By: teevee <teevee@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/29 16:22:58 by fthemis           #+#    #+#             */
-/*   Updated: 2021/01/06 19:12:41 by teevee           ###   ########.fr       */
+/*   Updated: 2021/01/09 16:20:21 by fthemis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,6 @@ char				*ft_ltoa_x(unsigned long arg, int cas);
 float				ft_atof(char *buf);
 void				*ft_lstindex(t_list *l, int i);
 int					ft_strcmp(char *str1, char *str2);
+int					ft_iscname(char c);
 
 #endif

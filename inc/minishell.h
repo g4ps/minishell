@@ -7,6 +7,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include "libft.h"
+#include "get_next_line.h"
 
 typedef	struct	s_inp
 {
@@ -35,7 +36,7 @@ char	*get_var(char *var_name, t_list *envp);
 char	**parse_path(char *str);
 char	*get_path(char *str, t_list *envp);
 t_inp	*get_arg(char **str, t_list *envp);
-char	*eval(char *str, t_list *envp);
+char	*eval(char *str, t_list *envp, int i);
 char	*eval_var(char *str, t_list *envp);
 
 /* debug funciton */
@@ -79,5 +80,13 @@ int	exec_job(t_list *job, t_env env, char *sh, t_fds *fd);
 int	execute(t_list *job, t_env env, char *sh, t_fds *fd);
 int	exec_pipe(t_list *job, t_env env, char *sh, t_fds *fd);
 void	del_inp(void *in);
+void	del_jobs(t_list *j);
+int		is_set_var(t_list *job);
+int		set_var(t_list *job, t_env e);
+int		is_var_name(char *var, char *var_name);
+char	*get_full_var(t_list *l, char *var);
+int		rm_var(t_list **l, char *var);
+char	*get_token(t_list *job);
+void	print_args(t_list *l);
 
 #endif

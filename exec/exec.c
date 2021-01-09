@@ -153,48 +153,55 @@ int			exec_job(t_list *job, t_env env, char *sh, t_fds *fds)
 {
 	int		ret;
 	t_list		*e;
+	int		p;
 
-	if (is_piped(job))
-	{
+	if ((p = is_piped(job)) > 0)
 		return (exec_pipe(job, env, sh, fds));
-	}
-	else
+	else if ( p == 0)
 	{
 		e = list_comb(env);
 		ret = -1;
 		*fds = parse_for_fds(job, fds);
 		if (is_builtin(((t_inp*)job->content)->token))
 			ret =  run_builtin(*fds, job, env);
+		else if (is_set_var(job))
+			ret = set_var(job, env);
 		else
-			ret = run_exec(*fds, job, e, sh);
+			ret = run_exec(*fds, job, env.envp, sh);
 		if (ret < 0)
 			print_err(ret, sh, get_prog_name(job));
 		ft_lstclear(&e, free);
 		return (ret);
 	}
+	print_err(-5, sh, get_prog_name(job));
+	return -5;
 }
 
 int			execute(t_list *job, t_env env, char *sh, t_fds *fds)
 {
 	int		ret;
+	int		p;
 
 	signal(SIGQUIT, f);
-	if (is_piped(job))
+	if ((p = is_piped(job)) > 0)
 	{
 		exit(exec_pipe(job, env, sh, fds));
 	}
-	else
+	else if (p == 0)
 	{
 		ret = -1;
 		*fds = parse_for_fds(job, fds);
 		if (is_builtin(((t_inp*)job->content)->token))
 			ret =  run_builtin(*fds, job, env);
+		else if (is_set_var(job))
+			ret = set_var(job, env);
 		else
-			ret = run_exec(*fds, job, list_comb(env), sh);
+			ret = run_exec(*fds, job, env.envp, sh);
 		if (ret < 0)
 			print_err(ret, sh, get_prog_name(job));
 		exit(ret);
 	}
+	exit(1);
 }
 
 int			exec_line(t_list *jobs, t_env env, char *sh)

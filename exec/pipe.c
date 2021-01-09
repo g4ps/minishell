@@ -8,7 +8,13 @@ int			is_piped(t_list *job)
 	while (job)
 	{
 		if (ft_strcmp(((t_inp*)job->content)->token, "|") == 0)
+		{
+			if (!job->next)
+				return -1;
+			if (ft_strcmp(((t_inp*)job->next->content)->token, "|") == 0)
+				return -1;
 			return (1);
+		}
 		job = job->next;
 	}
 	return (0);
@@ -49,10 +55,11 @@ int			exec_pipe(t_list *job, t_env env, char *sh, t_fds *fds)
 	int		f[2];
 	pid_t	pid;
 	int		status;
-	int		opt;
 	t_fds	fd;
 
 	pr_j = get_last_job(&job);
+	if (pr_j == NULL)
+		return -5;
 	if (pipe(f) < 0)
 		return (-5);
 	pid = fork();

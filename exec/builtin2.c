@@ -1,53 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   misc.c                                             :+:      :+:    :+:   */
+/*   builtin2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fthemis <fthemis@student.21-school>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/09 17:22:40 by fthemis           #+#    #+#             */
-/*   Updated: 2021/01/09 17:22:53 by fthemis          ###   ########.fr       */
+/*   Created: 2021/01/09 16:45:03 by fthemis           #+#    #+#             */
+/*   Updated: 2021/01/09 16:45:31 by fthemis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-t_list	*make_list_from_vector(char **vec)
+int			run_unset(t_fds fd, t_list *job, t_env env)
 {
-	t_list	*ret;
+	char	*tk;
 
-	ret = NULL;
-	while (*vec)
-	{
-		ft_lstadd_back(&ret, ft_lstnew(ft_strdup(*vec)));
-		vec++;
-	}
-	return (ret);
+	tk = get_token(job);
+	if (!tk)
+		return (0);
+	rm_var(&(env.envp), tk);
+	rm_var(&(env.vars), tk);
+	return (0);
 }
 
-char	*get_prog_name(t_list *job)
+int			run_env(t_fds fd, t_list *job, t_env env)
 {
-	char	*ret;
+	t_list	*envp;
 
-	ret = ((t_inp*)job->content)->token;
-	return (ret);
+	print_list(env.envp);
+	return (0);
 }
 
-char	**mvfl(t_list *l)
+int			run_exit(t_fds fd, t_list *job, t_env env)
 {
-	int		i;
-	char	**ret;
-	int		n;
+	int		k;
+	char	*s;
 
-	i = 0;
-	n = ft_lstsize(l);
-	ret = ft_calloc(sizeof(char**), n + 1);
-	while (l)
+	if (job)
 	{
-		ret[i] = ft_strdup(l->content);
-		i++;
-		l = l->next;
+		s = ((t_inp*)job->content)->token;
+		k = ft_atoi(s);
 	}
-	return (ret);
+	else
+		k = 0;
+	exit(k);
 }

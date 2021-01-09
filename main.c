@@ -52,12 +52,8 @@ int			main(int argc, char **argv, char **envp)
 	t_list	*j;
 	t_list	*vars;
 	t_list	*e;
-	size_t	t;
-	int		i;
 	int		last_ret;
 
-	i = 0;
-	t = 8096;
 	env_p = make_list_from_vector(envp);
 	vars = init_vars(argv);
 	env.envp = env_p;
@@ -68,17 +64,15 @@ int			main(int argc, char **argv, char **envp)
 		e = list_comb(env);
 		s = NULL;
 		run_prompt();
-		if (getline(&s, &t, stdin) == EOF)
+		if (get_next_line(0, &s) == 0)
 			my_exit(0);
-		while (s[i] != '\n' && s[i] != '\0')
-			i++;
-		s[i] = '\0';
 		l = parse_line(s, e);
 		j = make_jobs(l);
 		if (l && j)
 			last_ret = exec_line(j, env, argv[0]);
 		ft_lstclear(&l, del_inp);
 		ft_lstclear(&e, free);
+		del_jobs(j);
 		free(s);
 		update_return(&vars, last_ret);
 	}

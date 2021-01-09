@@ -6,7 +6,7 @@
 /*   By: teevee <teevee@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/06 18:50:52 by teevee            #+#    #+#             */
-/*   Updated: 2021/01/06 18:50:54 by teevee           ###   ########.fr       */
+/*   Updated: 2021/01/09 13:58:45 by fthemis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,7 @@ void	print_err(int err, char *sh, char *p)
 	else if (err == -3)
 		ft_putstr_fd("can\'t fork:(\n", 2);
 	else if (err == -4)
-		perror("p");
+		perror(p);
+	else if (err == -5)
+		ft_putstr_fd("somthing is wrong with pipes\n", 2);
 }

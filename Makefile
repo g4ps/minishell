@@ -1,4 +1,4 @@
-EXEC_SRCS = find.c exec.c builtin.c pipe.c
+EXEC_SRCS = find.c exec.c builtin.c pipe.c vars.c builtin2.c
 EXEC_DIR = exec/
 EXEC_SRCS := $(EXEC_SRCS:%=$(EXEC_DIR)%)
 EXEC_OBJS = $(EXEC_SRCS:.c=.o)
@@ -19,8 +19,17 @@ DATA_OBJS = $(DATA_SRCS:.c=.o)
 
 OBJS += $(DATA_OBJS)
 
-CFLAGS = -g -Iinc -Llibft -lft -Ilibft
-CFLAGS = -g -Iinc -Ilibft
+
+GNL_SRCS = get_next_line.c get_next_line_utils.c
+GNL_DIR = get_next_line/
+GNL_SRCS := $(GNL_SRCS:%=$(GNL_DIR)%)
+GNL_OBJS = $(GNL_SRCS:.c=.o)
+
+
+OBJS += $(GNL_OBJS)
+
+CFLAGS = -g -Iinc -Llibft -lft -Ilibft 
+CFLAGS = -g -Iinc -Ilibft -Iget_next_line
 
 all: libft a.out
 
@@ -44,6 +53,8 @@ clean:
 fclean: clean
 	-rm -rf a.out*
 	-make -C libft fclean
+
+re: fclean all
 
 dump:
 	make fclean

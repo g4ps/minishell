@@ -24,7 +24,7 @@ SRC= ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c\
 BNS = ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c\
 		ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c ft_strrev_bonus.c\
 		ft_atoil_bonus.c ft_itoa_x_bonus.c ft_isspace_bonus.c ft_ltoa_bonus.c ft_ltoa_x_bonus.c\
-		ft_atof_bonus.c ft_lstindex_bonus.c ft_strcmp_bonus.c
+		ft_lstindex_bonus.c ft_strcmp_bonus.c ft_iscname_bonus.c
 
 SRC_OBJECTS = $(patsubst %.c,%.o,$(SRC))
 BNS_OBJECTS = $(patsubst %.c,%.o,$(BNS))

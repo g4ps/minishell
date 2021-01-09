@@ -28,7 +28,7 @@ char				*get_var(char *var_name, t_list *envp)
 	len = ft_strlen(var_name);
 	while (envp)
 	{
-		if (ft_strncmp(var_name, envp->content, len) == 0)
+		if (is_var_name(envp->content, var_name))
 		{
 			s = envp->content;
 			while (*s != '=' && *s != '\0')
@@ -96,7 +96,7 @@ char				*get_path(char *str, t_list *envp)
 	char			*ret;
 
 	if (ft_strchr(str, '/') != NULL)
-		return (str);
+		return (ft_strdup(str));
 	if ((path = get_var("PATH", envp)) == NULL)
 		return (NULL);
 	dirs = parse_path(path);

@@ -37,7 +37,8 @@ char			*eval_var(char *str, t_list *envp)
 	return (ret);
 }
 
-char			*eval(char *str, t_list *envp)
+
+char			*eval(char *str, t_list *envp, int is_quoted)
 {
 	char		*s;
 	char		*prec;
@@ -49,32 +50,42 @@ char			*eval(char *str, t_list *envp)
 	s = str;
 	while (*str != '$' && *str != '\0')
 	{
-		if (is_spec_symb(str))
+		if ((is_spec_symb(str) && is_quoted) || (*str == '\\' && !is_quoted))
 			str++;
 		str++;
 	}
-	if (*str == '\0')
-		return (s);
-	prec = ft_calloc(sizeof(char), dq_len_n(s, str - s) + 1);
-	dq_strncpy(prec, s, str - s);
-	s = str;
-	while (!ft_isspace(*str) && *str != '\0')
+	if (*str != '\0')
+	{
+		prec = ft_calloc(sizeof(char), dq_len_n(s, str - s) + 1);
+		dq_strncpy(prec, s, str - s);
+		s = str;
 		str++;
-	var = ft_calloc(sizeof(char), dq_len_n(s, str - s) + 2);
-	dq_strncpy(var, s + 1, str - s - 1);
-	var = eval_var(var, envp);
-	ret = ft_strjoin(prec, var);
-	free(prec);
-	prec = ret;
-	ret = ft_strjoin(ret, str);
-	free(prec);
-	free(st);
-	return (ret);
+		while (ft_iscname(*str) && *str != '\0')
+			str++;
+		var = ft_calloc(sizeof(char), dq_len_n(s, str - s) + 2);
+		dq_strncpy(var, s + 1, str - s - 1);
+		var = eval_var(var, envp);
+		ret = ft_strjoin(prec, var);
+		free(prec);
+		prec = ret;
+		ret = ft_strjoin(ret, eval(ft_strdup(str), envp, is_quoted));
+		free(prec);
+		free(st);
+	}
+	else
+	{
+		ret = ft_calloc(sizeof(char), dq_len(str));
+		str = s;
+		while (*str != '\0')
+			str++;
+		dq_strncpy(ret, s, str - s);
+	}
+	return ret;
 }
 
 t_inp			*eval_token(t_inp *tok, t_list *envp)
 {
-	tok->token = eval(tok->token, envp);
+	tok->token = eval(tok->token, envp, tok->is_quoted);
 	return (tok);
 }
 
@@ -124,14 +135,19 @@ t_inp			*get_normal(char **str)
 	char		*s;
 	int			n;
 	t_inp		*ret;
+	char		prev;
 
+	prev = '\0';
 	s = *str;
 	if ((n = is_sh_symb(*str)))
 		(*str) += n;
 	else
 	{
-		while (!ft_isspace(**str) && **str != '\0' && !is_sh_symb(*str))
+		while ((prev == '\\' || (!ft_isspace(**str) && !is_sh_symb(*str))) && **str != '\0')
+		{
+			prev = **str;
 			(*str)++;
+		}
 	}
 	ret = ft_calloc(sizeof(t_inp), 1);
 	ret->token = ft_calloc(sizeof(char), *str - s + 1);
