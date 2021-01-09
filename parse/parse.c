@@ -71,6 +71,7 @@ char			*eval(char *str, t_list *envp, int is_quoted)
 		ret = ft_strjoin(ret, eval(ft_strdup(str), envp, is_quoted));
 		free(prec);
 		free(st);
+		free(var);
 	}
 	else
 	{
@@ -79,13 +80,18 @@ char			*eval(char *str, t_list *envp, int is_quoted)
 		while (*str != '\0')
 			str++;
 		dq_strncpy(ret, s, str - s + 1);
+
 	}
 	return ret;
 }
 
 t_inp			*eval_token(t_inp *tok, t_list *envp)
 {
+	char	*prev;
+
+	prev = tok->token;
 	tok->token = eval(tok->token, envp, tok->is_quoted);
+	free(prev);
 	return (tok);
 }
 

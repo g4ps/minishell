@@ -47,6 +47,7 @@ void	print_args(t_list *l)
 t_list	*make_new_job(t_list *line, t_list *end)
 {
 	t_list	*ret;
+	t_list	*next;
 	t_inp	*i;
 
 	ret = NULL;
@@ -57,8 +58,9 @@ t_list	*make_new_job(t_list *line, t_list *end)
 			return NULL;
 		i->token = ft_strdup(((t_inp*)line->content)->token);
 		i->is_quoted = ((t_inp*)line->content)->is_quoted;
+		next = line->next;
 		ft_lstadd_back(&ret, ft_lstnew(i));
-		line = line->next;
+		line = next;
 	}
 	return (ret);
 }

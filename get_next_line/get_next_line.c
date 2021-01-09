@@ -41,23 +41,6 @@ int		get_next_line(int fd, char **line)
 	return (1);
 }
 
-void	*ft_calloc(size_t count, size_t size)
-{
-	char			*ret;
-	unsigned long	i;
-
-	i = 0;
-	ret = malloc(count * size);
-	if (ret == NULL)
-		return (NULL);
-	while (i < count * size)
-	{
-		ret[i] = '\0';
-		i++;
-	}
-	return ((void*)ret);
-}
-
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	unsigned long	i;
