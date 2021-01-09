@@ -85,6 +85,8 @@ t_list	*make_jobs(t_list *line)
 	t_list	*prev;
 	char	*tk;
 
+	if (!line)
+		return (NULL);
 	ret = NULL;
 	prev = NULL;
 	s = line;

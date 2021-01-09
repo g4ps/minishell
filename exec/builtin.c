@@ -79,6 +79,8 @@ int			run_export(t_fds fd, t_list *job, t_env env)
 	t_list	*e;
 	char	*ret;
 
+	if (!job)
+		return (0);
 	tk = ((t_inp*)job->content)->token;
 	ret = get_full_var(env.vars, tk);
 	if (ret == NULL)

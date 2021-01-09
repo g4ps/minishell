@@ -34,7 +34,7 @@ char			*eval_var(char *str, t_list *envp)
 	ret = get_var(str, envp);
 	if (ret == NULL)
 		return (ft_strdup(""));
-	return (ret);
+	return (ft_strdup(ret));
 }
 
 
@@ -45,6 +45,7 @@ char			*eval(char *str, t_list *envp, int is_quoted)
 	char		*var;
 	char		*ret;
 	char		*st;
+	char		*t;
 
 	st = str;
 	s = str;
@@ -62,16 +63,18 @@ char			*eval(char *str, t_list *envp, int is_quoted)
 		str++;
 		while (ft_iscname(*str) && *str != '\0')
 			str++;
-		var = ft_calloc(sizeof(char), dq_len_n(s, str - s) + 2);
-		dq_strncpy(var, s + 1, str - s - 1);
-		var = eval_var(var, envp);
+		t = ft_calloc(sizeof(char), dq_len_n(s, str - s) + 2);
+		dq_strncpy(t, s + 1, str - s - 1);
+		var = eval_var(t, envp);
+		free(t);
 		ret = ft_strjoin(prec, var);
+		free(var);
 		free(prec);
 		prec = ret;
-		ret = ft_strjoin(ret, eval(ft_strdup(str), envp, is_quoted));
+		t =  eval(str, envp, is_quoted);
+		ret = ft_strjoin(ret, t);
+		free(t);
 		free(prec);
-		free(st);
-		free(var);
 	}
 	else
 	{
