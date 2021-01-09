@@ -46,7 +46,9 @@ t_list		*get_last_job(t_list **l)
 	prev = NULL;
 	if (s)
 		s->next = NULL;
-	return (t);
+	prev = make_new_job(t, s->next);
+	ft_lstclear(&(s->next), del_inp);
+	return (prev);
 }
 
 int			exec_pipe(t_list *job, t_env env, char *sh, t_fds *fds)
@@ -76,6 +78,7 @@ int			exec_pipe(t_list *job, t_env env, char *sh, t_fds *fds)
 		fd.in_fd = f[0];
 		fd.out_fd = fds->out_fd;
 		exec_job(pr_j, env, sh, &fd);
+		ft_lstclear(&pr_j, del_inp);
 		waitpid(pid, &status, 0);
 		return (WEXITSTATUS(status));
 	}

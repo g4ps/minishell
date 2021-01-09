@@ -88,5 +88,6 @@ char	*get_full_var(t_list *l, char *var);
 int		rm_var(t_list **l, char *var);
 char	*get_token(t_list *job);
 void	print_args(t_list *l);
+t_list	*make_new_job(t_list *s, t_list *e);
 
 #endif
