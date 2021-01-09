@@ -74,11 +74,11 @@ char			*eval(char *str, t_list *envp, int is_quoted)
 	}
 	else
 	{
-		ret = ft_calloc(sizeof(char), dq_len(str));
+		ret = ft_calloc(sizeof(char), dq_len(s));
 		str = s;
 		while (*str != '\0')
 			str++;
-		dq_strncpy(ret, s, str - s);
+		dq_strncpy(ret, s, str - s + 1);
 	}
 	return ret;
 }

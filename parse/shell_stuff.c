@@ -74,5 +74,6 @@ char	*dq_strncpy(char *dst, const char *str, int n)
 		j++;
 		i++;
 	}
+	dst[j] = 0;
 	return (dst);
 }
