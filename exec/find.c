@@ -1,24 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   find.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: teevee <teevee@students.21-school.ru>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/10 02:53:24 by teevee            #+#    #+#             */
+/*   Updated: 2021/01/11 18:08:32 by fthemis          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include <dirent.h>
 #include "minishell.h"
-
-void				free_vec(char **vec)
-{
-	char			**s;
-	char			**n;
-
-	if (vec == NULL)
-		return ;
-	s = vec;
-	while (*vec)
-	{
-		n = vec + 1;
-		free(*vec);
-		vec = n;
-	}
-	free(*vec);
-	free(s);
-}
 
 char				*get_var(char *var_name, t_list *envp)
 {
@@ -45,7 +39,6 @@ char				*get_var(char *var_name, t_list *envp)
 char				**parse_path(char *str)
 {
 	char			**ret;
-	char			**t;
 
 	ret = ft_split(str, ':');
 	return (ret);

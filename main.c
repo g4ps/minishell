@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: teevee <teevee@students.21-school.ru>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/11 02:57:24 by teevee            #+#    #+#             */
+/*   Updated: 2021/01/11 18:26:20 by fthemis          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -6,11 +18,6 @@
 #include "minishell.h"
 #include "libft.h"
 #include <unistd.h>
-
-void		run_prompt()
-{
-	ft_putstr_fd("> ", 1);
-}
 
 void		print_vec(char **vec)
 {
@@ -21,20 +28,16 @@ void		print_vec(char **vec)
 	}
 }
 
-void		f1(int k)
-{
-	ft_putstr_fd("\n", 1);
-	run_prompt();
-}
-
-void		f(int k)
-{
-}
-
 void		my_exit(int i)
 {
+	i = 0;
 	ft_putstr_fd(" exit\n", 1);
 	exit(0);
+}
+
+void		run_prompt()
+{
+	ft_putstr_fd("> ", 1);
 }
 
 void		signal_setup()
@@ -54,6 +57,7 @@ int			main(int argc, char **argv, char **envp)
 	t_list	*e;
 	int		last_ret;
 
+	argc = 0;
 	env_p = make_list_from_vector(envp);
 	vars = init_vars(argv);
 	env.envp = env_p;

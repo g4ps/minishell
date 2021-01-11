@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shell_stuff.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: teevee <teevee@students.21-school.ru>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/10 02:58:51 by teevee            #+#    #+#             */
+/*   Updated: 2021/01/11 18:25:34 by fthemis          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "minishell.h"
 
@@ -54,7 +66,6 @@ int		dq_len_n(const char *str, int n)
 
 char	*dq_strncpy(char *dst, const char *str, int n)
 {
-	char	*ret;
 	int		i;
 	int		j;
 

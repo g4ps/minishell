@@ -1,11 +1,23 @@
-EXEC_SRCS = find.c exec.c builtin.c pipe.c vars.c builtin2.c
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: teevee <teevee@students.21-school.ru>      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/01/10 16:59:07 by teevee            #+#    #+#              #
+#    Updated: 2021/01/11 18:08:15 by fthemis          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+EXEC_SRCS = find.c exec.c exec1.c exec2.c exec_help.c builtin.c pipe.c vars.c builtin2.c
 EXEC_DIR = exec/
 EXEC_SRCS := $(EXEC_SRCS:%=$(EXEC_DIR)%)
 EXEC_OBJS = $(EXEC_SRCS:.c=.o)
 
 OBJS += $(EXEC_OBJS)
 
-PARSE_SRCS = parse.c jobs.c misc.c err.c shell_stuff.c
+PARSE_SRCS = parse.c parse1.c parse2.c jobs.c misc.c err.c shell_stuff.c
 PARSE_DIR = parse/
 PARSE_SRCS := $(PARSE_SRCS:%=$(PARSE_DIR)%)
 PARSE_OBJS = $(PARSE_SRCS:.c=.o)
@@ -29,7 +41,7 @@ GNL_OBJS = $(GNL_SRCS:.c=.o)
 OBJS += $(GNL_OBJS)
 
 CFLAGS = -g -Iinc -Llibft -lft -Ilibft 
-CFLAGS = -g -Iinc -Ilibft -Iget_next_line
+CFLAGS = -g -Iinc -Ilibft -Iget_next_line -Wall -Wextra -Werror
 
 all: libft a.out
 

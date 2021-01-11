@@ -1,20 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_iscname_bonus.c                                 :+:      :+:    :+:   */
+/*   parse2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fthemis <fthemis@student.21-school>        +#+  +:+       +#+        */
+/*   By: teevee <teevee@students.21-school.ru>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/09 16:21:23 by fthemis           #+#    #+#             */
-/*   Updated: 2021/01/11 17:44:00 by fthemis          ###   ########.fr       */
+/*   Created: 2021/01/11 06:45:42 by teevee            #+#    #+#             */
+/*   Updated: 2021/01/11 06:52:07 by teevee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "minishell.h"
 
-int	ft_iscname(char c)
+char			*eval_var(char *str, t_list *envp)
 {
-	if (ft_isalnum(c) || c == '_' || c == '?')
-		return (1);
-	return (0);
+	char		*ret;
+
+	ret = get_var(str, envp);
+	if (ret == NULL)
+		return (ft_strdup(""));
+	return (ft_strdup(ret));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fthemis <fthemis@student.21-school>        +#+  +:+       +#+        */
+/*   By: teevee <teevee@students.21-school.ru>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/09 16:43:17 by fthemis           #+#    #+#             */
-/*   Updated: 2021/01/09 16:44:49 by fthemis          ###   ########.fr       */
+/*   Updated: 2021/01/11 18:15:20 by fthemis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 int			run_echo(t_fds fd, t_list *job, t_env env)
 {
 	char	*k;
-	t_list	*envp;
 	int		nl;
 
+	env.vars = NULL;
 	nl = 1;
 	while (job)
 	{
@@ -45,6 +45,7 @@ int			run_cd(t_fds fd, t_list *job, t_env env)
 	char	*k;
 	t_list	*envp;
 
+	fd.in_fd = 0;
 	envp = list_comb(env);
 	if (job)
 		k = ((t_inp*)job->content)->token;
@@ -76,9 +77,9 @@ int			run_pwd(t_fds fd, t_list *job, t_env env)
 int			run_export(t_fds fd, t_list *job, t_env env)
 {
 	char	*tk;
-	t_list	*e;
 	char	*ret;
 
+	fd.in_fd = 0;
 	if (!job)
 		return (0);
 	tk = ((t_inp*)job->content)->token;

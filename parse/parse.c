@@ -1,10 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: teevee <teevee@students.21-school.ru>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/10 02:58:30 by teevee            #+#    #+#             */
+/*   Updated: 2021/01/11 18:24:34 by fthemis          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "minishell.h"
-
-/* puropse of those function is to parse an input line into the set of */
-/* evaluated strings (justlike in bash */
-
-/*to norm: header, 9 func, 31 line in *eval*/
 
 static int		dss(char *str1, char *str2)
 {
@@ -27,34 +34,43 @@ int				is_sh_symb(char *str)
 	return (0);
 }
 
-char			*eval_var(char *str, t_list *envp)
+char			*eval_help(char *str, char *ret, char *s)
 {
-	char		*ret;
-
-	ret = get_var(str, envp);
-	if (ret == NULL)
-		return (ft_strdup(""));
-	return (ft_strdup(ret));
+	ret = ft_calloc(sizeof(char), dq_len(s));
+	str = s;
+	while (*str != '\0')
+		str++;
+	dq_strncpy(ret, s, str - s + 1);
+	return (ret);
 }
 
+int				eval_count(char *str, int is_quoted)
+{
+	int			i;
+
+	i = 0;
+	while (*str != '$' && *str != '\0')
+	{
+		if ((is_spec_symb(str) && is_quoted) || (*str == '\\' && !is_quoted))
+		{
+			str++;
+			i++;
+		}
+		str++;
+		i++;
+	}
+	return (i);
+}
 
 char			*eval(char *str, t_list *envp, int is_quoted)
 {
 	char		*s;
 	char		*prec;
-	char		*var;
 	char		*ret;
-	char		*st;
 	char		*t;
 
-	st = str;
 	s = str;
-	while (*str != '$' && *str != '\0')
-	{
-		if ((is_spec_symb(str) && is_quoted) || (*str == '\\' && !is_quoted))
-			str++;
-		str++;
-	}
+	str = str + eval_count(str, is_quoted);
 	if (*str != '\0')
 	{
 		prec = ft_calloc(sizeof(char), dq_len_n(s, str - s) + 1);
@@ -65,118 +81,12 @@ char			*eval(char *str, t_list *envp, int is_quoted)
 			str++;
 		t = ft_calloc(sizeof(char), dq_len_n(s, str - s) + 2);
 		dq_strncpy(t, s + 1, str - s - 1);
-		var = eval_var(t, envp);
-		free(t);
-		ret = ft_strjoin(prec, var);
-		free(var);
-		free(prec);
-		prec = ret;
-		t =  eval(str, envp, is_quoted);
-		ret = ft_strjoin(ret, t);
+		ret = ft_strjoin(prec, eval_var(t, envp));
+		ret = ft_strjoin(ret, eval(str, envp, is_quoted));
 		free(t);
 		free(prec);
 	}
 	else
-	{
-		ret = ft_calloc(sizeof(char), dq_len(s));
-		str = s;
-		while (*str != '\0')
-			str++;
-		dq_strncpy(ret, s, str - s + 1);
-
-	}
-	return ret;
-}
-
-t_inp			*eval_token(t_inp *tok, t_list *envp)
-{
-	char	*prev;
-
-	prev = tok->token;
-	tok->token = eval(tok->token, envp, tok->is_quoted);
-	free(prev);
-	return (tok);
-}
-
-t_inp			*get_quote(char **str)
-{
-	char		*s;
-	t_inp		*ret;
-
-	(*str)++;
-	s = *str;
-	ret = ft_calloc(sizeof(t_inp), 1);
-	ret->is_quoted = 1;
-	while (**str != '\'' && **str != '\0')
-	{
-		(*str)++;
-	}
-	ret->token = ft_calloc(sizeof(char), *str - s + 1);
-	ft_strlcpy(ret->token, s, *str - s + 1);
-	(*str)++;
+		ret = eval_help(str, NULL, s);
 	return (ret);
-}
-
-t_inp			*get_dquote(char **str)
-{
-	char		*s;
-	t_inp		*ret;
-
-	(*str)++;
-	s = *str;
-	while (**str != '\"' && **str != '\0')
-	{
-		if (**str == '\\' && *(*str + 1) == '\"')
-			(*str) += 2;
-		else
-			(*str)++;
-	}
-	ret = ft_calloc(sizeof(t_inp), 1);
-	ret->is_quoted = 1;
-	ret->token = ft_calloc(sizeof(char), *str - s + 1);
-	ft_strlcpy(ret->token, s, *str - s + 1);
-	(*str)++;
-	return (ret);
-}
-
-t_inp			*get_normal(char **str)
-{
-	char		*s;
-	int			n;
-	t_inp		*ret;
-	char		prev;
-
-	prev = '\0';
-	s = *str;
-	if ((n = is_sh_symb(*str)))
-		(*str) += n;
-	else
-	{
-		while ((prev == '\\' || (!ft_isspace(**str) && !is_sh_symb(*str))) && **str != '\0')
-		{
-			prev = **str;
-			(*str)++;
-		}
-	}
-	ret = ft_calloc(sizeof(t_inp), 1);
-	ret->token = ft_calloc(sizeof(char), *str - s + 1);
-	ft_strlcpy(ret->token, s, *str - s + 1);
-	return (ret);
-}
-
-t_inp			*get_arg(char **str, t_list *envp)
-{
-	char		*s;
-
-	while (ft_isspace(**str))
-	{
-		(*str)++;
-	}
-	if (**str == '\'')
-		return (get_quote(str));
-	else if (**str == '\"')
-		return (eval_token(get_dquote(str), envp));
-	else if (**str == '\0')
-		return (NULL);
-	return (eval_token(get_normal(str), envp));
 }
